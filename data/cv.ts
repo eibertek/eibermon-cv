@@ -431,7 +431,7 @@ export const cv: CV = {
       ],
       skills: ["react", "angular", "node", "postgres"],
       npc: {
-        name: "Priya",
+        name: "Marcos",
         role: { en: "Project Manager", es: "Project Manager" },
         greeting: { en: "React one week, Angular the next. You never blinked.", es: "React una semana, Angular la siguiente. Nunca te inmutaste." },
       },

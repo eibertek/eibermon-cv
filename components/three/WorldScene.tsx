@@ -3,7 +3,7 @@ import { Asset } from "./Asset";
 import Contact from "./Contact";
 import JobSite from "./JobSite";
 import Label from "./Label";
-import SkillItem from "./SkillItem";
+import SkillCreature from "./SkillCreature";
 
 function DistrictFloor({ district }: { district: District }) {
   const [cx, cz] = district.center;
@@ -52,7 +52,7 @@ export default function WorldScene() {
       ))}
 
       {world.skills.map((s) => (
-        <SkillItem key={s.interactId} spot={s} />
+        <SkillCreature key={s.interactId} spot={s} />
       ))}
 
       {world.jobs.map((j) => (

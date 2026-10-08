@@ -36,17 +36,17 @@ This project has never had version control. Before we start making incremental, 
 **Files:**
 - Create: `.git/` (via `git init`)
 
-- [ ] **Step 1: Initialize the repo**
+- [x] **Step 1: Initialize the repo**
 
 Run: `git init`
 Expected: `Initialized empty Git repository in /Users/marianoeiberman/projects/cv-city/.git/`
 
-- [ ] **Step 2: Confirm `.gitignore` excludes the right things**
+- [x] **Step 2: Confirm `.gitignore` excludes the right things**
 
 Run: `git status --short | head -30`
 Expected: no `node_modules/`, `.next/`, or `.env` lines in the output (they're already in `.gitignore`).
 
-- [ ] **Step 3: Stage and commit everything as the baseline**
+- [x] **Step 3: Stage and commit everything as the baseline**
 
 ```bash
 git add -A
@@ -75,7 +75,7 @@ Expected: a single commit succeeds; `git log --oneline` shows exactly one commit
 - Produces: `catchSkill(id: string): void` on `useGame`'s state — adds `id` to `discovered` if not already present. Task 6 calls this when a battle reaches the `"caught"` phase.
 - Produces: `interact()` (existing function, behavior change) — no longer adds a `kind === "skill"` interactable to `discovered` when opening its dialog; still does for `"job"` and `"contact"`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 Create `test/store.test.ts`:
 
@@ -130,12 +130,12 @@ test("catchSkill() does not add a duplicate when caught twice", () => {
 });
 ```
 
-- [ ] **Step 2: Run the tests to verify they fail**
+- [x] **Step 2: Run the tests to verify they fail**
 
 Run: `node --import tsx --test test/store.test.ts`
 Expected: FAIL — `catchSkill` is not a function (it doesn't exist on the store yet), and the "does not discover it yet" test fails because `interact()` currently discovers every kind unconditionally.
 
-- [ ] **Step 3: Implement the change**
+- [x] **Step 3: Implement the change**
 
 In `game/store.ts`, add `catchSkill` to the `GameState` type (near `resetProgress`):
 
@@ -171,17 +171,17 @@ Add `catchSkill` next to `resetProgress` in the store body:
         })),
 ```
 
-- [ ] **Step 4: Run the tests to verify they pass**
+- [x] **Step 4: Run the tests to verify they pass**
 
 Run: `node --import tsx --test test/store.test.ts`
 Expected: PASS — `# pass 4`, `# fail 0`.
 
-- [ ] **Step 5: Typecheck**
+- [x] **Step 5: Typecheck**
 
 Run: `npm run typecheck`
 Expected: no errors.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add game/store.ts test/store.test.ts
@@ -209,7 +209,7 @@ EOF
 - Consumes: nothing new.
 - Produces: `world.obstacles` no longer contains a circle obstacle at any skill's position — skills are purely proximity-triggered now that they wander (Task 5), not physical obstacles.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Create `test/layout.test.ts`:
 
@@ -228,12 +228,12 @@ test("skills are not collision obstacles", () => {
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `node --import tsx --test test/layout.test.ts`
 Expected: FAIL — every skill currently has a matching circle obstacle.
 
-- [ ] **Step 3: Remove the obstacle**
+- [x] **Step 3: Remove the obstacle**
 
 In `world/layout.ts`, inside `buildWorld()`, find the `obstacles` array:
 
@@ -259,17 +259,17 @@ Delete the `...skillSpots.map...` line so it reads:
   ];
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
+- [x] **Step 4: Run the test to verify it passes**
 
 Run: `node --import tsx --test test/layout.test.ts`
 Expected: PASS — `# pass 1`, `# fail 0`.
 
-- [ ] **Step 5: Typecheck**
+- [x] **Step 5: Typecheck**
 
 Run: `npm run typecheck`
 Expected: no errors.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add world/layout.ts test/layout.test.ts
@@ -302,7 +302,7 @@ EOF
 - Produces: `throwBall(state: BattleState): BattleState` — `"catching"` → `"caught"`; no-op otherwise.
 - Consumed by: Task 6 (`BattleModal.tsx`).
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 Create `test/battle.test.ts`:
 
@@ -355,12 +355,12 @@ test("throwBall only works from catching, and moves to caught", () => {
 });
 ```
 
-- [ ] **Step 2: Run the tests to verify they fail**
+- [x] **Step 2: Run the tests to verify they fail**
 
 Run: `node --import tsx --test test/battle.test.ts`
 Expected: FAIL — `game/battle.ts` doesn't exist yet (module not found).
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 Create `game/battle.ts`:
 
@@ -395,17 +395,17 @@ export function throwBall(state: BattleState): BattleState {
 }
 ```
 
-- [ ] **Step 4: Run the tests to verify they pass**
+- [x] **Step 4: Run the tests to verify they pass**
 
 Run: `node --import tsx --test test/battle.test.ts`
 Expected: PASS — `# pass 6`, `# fail 0`.
 
-- [ ] **Step 5: Typecheck**
+- [x] **Step 5: Typecheck**
 
 Run: `npm run typecheck`
 Expected: no errors.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add game/battle.ts test/battle.test.ts
@@ -436,7 +436,7 @@ EOF
 
 This task has no automated test (R3F `useFrame` needs a live Canvas/render loop that Node's test runner can't provide, and mocking Three.js well enough to make that meaningful isn't worth it for a hobby project). It's verified with `npm run typecheck` plus the manual walkthrough in Step 5 below — notably, the "freeze on capture" behavior is checked by calling the store action directly from the browser console, since `BattleModal` (which triggers it for real) doesn't exist until Task 6.
 
-- [ ] **Step 1: Create the new component**
+- [x] **Step 1: Create the new component**
 
 Create `components/three/SkillCreature.tsx`:
 
@@ -518,11 +518,11 @@ export default function SkillCreature({ spot }: { spot: SkillSpot }) {
 }
 ```
 
-- [ ] **Step 2: Delete the old component**
+- [x] **Step 2: Delete the old component**
 
 Run: `rm components/three/SkillItem.tsx`
 
-- [ ] **Step 3: Update the import in `WorldScene.tsx`**
+- [x] **Step 3: Update the import in `WorldScene.tsx`**
 
 In `components/three/WorldScene.tsx`, change:
 
@@ -552,12 +552,12 @@ to:
       ))}
 ```
 
-- [ ] **Step 4: Typecheck**
+- [x] **Step 4: Typecheck**
 
 Run: `npm run typecheck`
 Expected: no errors (confirms the rename didn't leave a dangling import anywhere).
 
-- [ ] **Step 5: Manual verification**
+- [x] **Step 5: Manual verification**
 
 Run: `npm run dev`, open `http://localhost:3000`, start the game.
 
@@ -566,7 +566,7 @@ Run: `npm run dev`, open `http://localhost:3000`, start the game.
    Confirm: the TypeScript skill's pedestal turns green and its ring disappears (existing behavior), and the creature **stops wandering** and settles back over the pedestal.
 3. Remove the temporary `window.useGame = useGame;` line from `game/store.ts` again — it was only for this manual check, and must not ship.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add components/three/SkillCreature.tsx components/three/WorldScene.tsx
@@ -602,7 +602,7 @@ EOF
 
 No automated test for this task either (2D UI driven by clicks, same reasoning as Task 5). Verified with `npm run typecheck` plus the manual walkthrough in Step 6.
 
-- [ ] **Step 1: Create `BattleModal.tsx`**
+- [x] **Step 1: Create `BattleModal.tsx`**
 
 Create `components/BattleModal.tsx`:
 
@@ -741,7 +741,7 @@ function CreatureArt({ category, color, shaking }: { category: Category; color: 
 }
 ```
 
-- [ ] **Step 2: Make `Dialog` skip skills**
+- [x] **Step 2: Make `Dialog` skip skills**
 
 In `components/Dialog.tsx`, right after the existing `if (!interactable) return null;` line, add:
 
@@ -749,7 +749,7 @@ In `components/Dialog.tsx`, right after the existing `if (!interactable) return 
   if (interactable.kind === "skill") return null;
 ```
 
-- [ ] **Step 3: Mount `BattleModal` in `Game.tsx`**
+- [x] **Step 3: Mount `BattleModal` in `Game.tsx`**
 
 In `components/Game.tsx`, add the import next to the other component imports:
 
@@ -764,7 +764,7 @@ And render it next to `<Dialog />`:
       <BattleModal />
 ```
 
-- [ ] **Step 4: Stop the interact key from fleeing a battle**
+- [x] **Step 4: Stop the interact key from fleeing a battle**
 
 In `game/useKeyboard.ts`, add the import:
 
@@ -796,7 +796,7 @@ with:
       }
 ```
 
-- [ ] **Step 5: Add the battle styles**
+- [x] **Step 5: Add the battle styles**
 
 In `app/globals.css`, append at the end of the file:
 
@@ -904,12 +904,12 @@ In `app/globals.css`, append at the end of the file:
 }
 ```
 
-- [ ] **Step 6: Typecheck**
+- [x] **Step 6: Typecheck**
 
 Run: `npm run typecheck`
 Expected: no errors.
 
-- [ ] **Step 7: Manual verification**
+- [x] **Step 7: Manual verification**
 
 Run: `npm run dev`, open `http://localhost:3000`, start the game.
 
@@ -924,7 +924,7 @@ Run: `npm run dev`, open `http://localhost:3000`, start the game.
 9. Press **E** while a battle is open (open a different, not-yet-caught skill) — confirm it does **not** close the battle (this is the Review Focus fix from Task 6 Step 4). Pressing **Escape** should still close it.
 10. Confirm a job (e.g. walk to an NPC) still opens the old text `Dialog`, unaffected.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add components/BattleModal.tsx components/Dialog.tsx components/Game.tsx game/useKeyboard.ts app/globals.css

@@ -29,6 +29,7 @@ type GameState = {
   clearTeleport: () => void;
   resetProgress: () => void;
   setCharacter: (character: Character) => void;
+  catchSkill: (id: string) => void;
 };
 
 export const useGame = create<GameState>()(
@@ -48,9 +49,13 @@ export const useGame = create<GameState>()(
       interact: () => {
         const { nearbyId, dialogId, discovered } = get();
         if (!nearbyId || dialogId || !interactableById.has(nearbyId)) return;
+        const kind = interactableById.get(nearbyId)!.kind;
         set({
           dialogId: nearbyId,
-          discovered: discovered.includes(nearbyId) ? discovered : [...discovered, nearbyId],
+          discovered:
+            kind !== "skill" && !discovered.includes(nearbyId)
+              ? [...discovered, nearbyId]
+              : discovered,
         });
       },
       closeDialog: () => set({ dialogId: null }),
@@ -60,6 +65,10 @@ export const useGame = create<GameState>()(
       clearTeleport: () => set({ teleport: null }),
       resetProgress: () => set({ discovered: [] }),
       setCharacter: (character) => set({ character }),
+      catchSkill: (id) =>
+        set((s) => ({
+          discovered: s.discovered.includes(id) ? s.discovered : [...s.discovered, id],
+        })),
     }),
     {
       name: "cv-city-progress",

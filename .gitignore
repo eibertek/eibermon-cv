@@ -1,0 +1,13 @@
+node_modules
+.next
+out
+*.tsbuildinfo
+next-env.d.ts
+.env
+.env*.local
+.DS_Store
+.claude/
+
+# Descargas crudas de Meshy (pesadas). Guardá un backup aparte (Drive, Git LFS, etc.).
+# Lo que usa el juego son los modelos ya optimizados en public/models/.
+models-src/

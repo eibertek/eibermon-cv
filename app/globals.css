@@ -1,0 +1,638 @@
+:root {
+  --bg: #a9d6e5;
+  --ink: #2b2a26;
+  --paper: #fdfbf4;
+  --paper-dim: #f3efe2;
+  --line: #e0d9c4;
+  --accent: #ff7a59;
+  --accent-ink: #fff5ef;
+  --shadow: 0 10px 30px rgba(43, 42, 38, 0.18);
+  --radius: 16px;
+  font-size: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", system-ui, -apple-system, Helvetica, Arial, sans-serif;
+}
+
+button {
+  font-family: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+/* ───────────────────────── Botones y links compartidos ───────────────────────── */
+
+.btn {
+  appearance: none;
+  border: none;
+  border-radius: 999px;
+  padding: 0.6em 1.1em;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: 0 2px 0 rgba(43, 42, 38, 0.12);
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.btn--primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.link {
+  appearance: none;
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  opacity: 0.75;
+}
+
+.link:hover {
+  opacity: 1;
+}
+
+.desktop-only {
+  display: list-item;
+}
+
+.touch-only {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .desktop-only {
+    display: none;
+  }
+  .touch-only {
+    display: block;
+  }
+}
+
+/* ───────────────────────── Juego: contenedor y canvas ───────────────────────── */
+
+.game {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.boot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* ───────────────────────── Carteles 3D (Label) ───────────────────────── */
+
+.label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1em;
+  padding: 0.35em 0.8em;
+  background: rgba(253, 251, 244, 0.92);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  white-space: nowrap;
+  font-size: 0.85rem;
+  line-height: 1.2;
+  transform: translateY(-50%);
+}
+
+.label strong {
+  font-size: 0.95em;
+}
+
+.label span {
+  opacity: 0.75;
+  font-size: 0.82em;
+}
+
+.label--district {
+  background: rgba(253, 251, 244, 0.85);
+  font-size: 1rem;
+  padding: 0.5em 1.1em;
+}
+
+.label--building {
+  background: rgba(253, 251, 244, 0.95);
+}
+
+/* ───────────────────────── Pantalla de inicio ───────────────────────── */
+
+.start {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: radial-gradient(circle at top, rgba(169, 214, 229, 0.55), rgba(43, 42, 38, 0.55));
+  z-index: 30;
+}
+
+.start__card {
+  max-width: 30rem;
+  width: 100%;
+  background: var(--paper);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2rem;
+  text-align: center;
+}
+
+.start__eyebrow {
+  margin: 0 0 0.3em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+.start__card h1 {
+  margin: 0 0 0.2em;
+  font-size: 1.8rem;
+}
+
+.start__title {
+  margin: 0 0 1em;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.start__summary {
+  margin: 0 0 1.2em;
+  line-height: 1.5;
+  opacity: 0.85;
+}
+
+.start__characters {
+  display: flex;
+  gap: 0.6em;
+  justify-content: center;
+  margin-bottom: 1.2em;
+}
+
+.start__character {
+  appearance: none;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  padding: 0.5em 1.3em;
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.start__character--active {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.start__help {
+  list-style: none;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+  margin: 0 0 1.4em;
+  padding: 0.9em 1em;
+  background: var(--paper-dim);
+  border-radius: 10px;
+  font-size: 0.9rem;
+}
+
+.start__help kbd {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 0.1em 0.45em;
+  font-family: inherit;
+  font-size: 0.85em;
+}
+
+.start__actions {
+  display: flex;
+  gap: 0.6em;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 0.8em;
+}
+
+/* ───────────────────────── Overlay de CV clásico ───────────────────────── */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+}
+
+.overlay__bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1em;
+  padding: 0.8em 1.2em;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-dim);
+}
+
+.overlay__actions {
+  display: flex;
+  gap: 0.5em;
+}
+
+.overlay__sheet {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1.2rem 4rem;
+}
+
+/* ───────────────────────── Contenido del CV ───────────────────────── */
+
+.cvpage {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 1.2rem;
+  min-height: 100vh;
+  background: var(--paper-dim);
+}
+
+.cv {
+  max-width: 42rem;
+  width: 100%;
+  background: var(--paper);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2.5rem;
+  line-height: 1.5;
+}
+
+.cv__header {
+  margin-bottom: 1.6em;
+}
+
+.cv__header h1 {
+  margin: 0 0 0.15em;
+}
+
+.cv__title {
+  margin: 0 0 0.3em;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.cv__meta {
+  margin: 0 0 0.6em;
+  opacity: 0.65;
+  font-size: 0.9rem;
+}
+
+.cv__links {
+  display: flex;
+  gap: 0.9em;
+  flex-wrap: wrap;
+  margin: 0;
+}
+
+.cv__links a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cv section {
+  margin-bottom: 1.8em;
+}
+
+.cv section:last-child {
+  margin-bottom: 0;
+}
+
+.cv h2 {
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 0.3em;
+  margin: 0 0 0.7em;
+}
+
+.cv__job {
+  margin-bottom: 1.2em;
+}
+
+.cv__job:last-child {
+  margin-bottom: 0;
+}
+
+.cv__jobhead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1em;
+  flex-wrap: wrap;
+}
+
+.cv__jobhead h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.cv__jobhead span {
+  opacity: 0.6;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.cv__job ul {
+  margin: 0.5em 0 0;
+  padding-left: 1.2em;
+}
+
+/* ───────────────────────── HUD ───────────────────────── */
+
+.hud {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hud__card {
+  pointer-events: auto;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1em;
+  background: rgba(253, 251, 244, 0.92);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 0.6em 1em;
+}
+
+.hud__name {
+  font-size: 1rem;
+}
+
+.hud__progress {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.hud__actions {
+  pointer-events: auto;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5em;
+}
+
+.hud__iconbtn {
+  padding: 0.5em 0.7em;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.hud__goto {
+  position: relative;
+}
+
+.hud__gotomenu {
+  position: absolute;
+  top: calc(100% + 0.4em);
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+  background: var(--paper);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 0.5em;
+  min-width: 11rem;
+}
+
+.hud__interact {
+  pointer-events: auto;
+  align-self: center;
+  margin-bottom: 7.5rem;
+}
+
+/* ───────────────────────── Minimapa ───────────────────────── */
+
+.minimap {
+  pointer-events: none;
+  align-self: flex-end;
+  width: min(32vw, 220px);
+  height: min(32vw, 220px);
+  background: rgba(253, 251, 244, 0.88);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 0.4rem;
+}
+
+.minimap__district {
+  opacity: 0.9;
+  stroke: rgba(43, 42, 38, 0.15);
+  stroke-width: 0.3;
+}
+
+.minimap__dot {
+  fill: #c9c2ab;
+  stroke: var(--paper);
+  stroke-width: 0.2;
+}
+
+.minimap__dot--found {
+  fill: #4caf63;
+}
+
+.minimap__player {
+  fill: var(--accent);
+  stroke: var(--paper);
+  stroke-width: 0.3;
+}
+
+/* ───────────────────────── Diálogo de interacción ───────────────────────── */
+
+.dialog {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem;
+  background: rgba(43, 42, 38, 0.45);
+}
+
+.dialog__card {
+  position: relative;
+  max-width: 28rem;
+  width: 100%;
+  max-height: calc(100vh - 2.4rem);
+  overflow-y: auto;
+  background: var(--paper);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2rem;
+}
+
+.dialog__close {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  width: 2em;
+  height: 2em;
+  border-radius: 999px;
+  border: none;
+  background: var(--paper-dim);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.dialog__eyebrow {
+  margin: 0 0 0.3em;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+.dialog__card h2 {
+  margin: 0 0 0.5em;
+  font-size: 1.3rem;
+}
+
+.dialog__level {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+  margin-bottom: 0.9em;
+}
+
+.dialog__pip {
+  width: 0.8em;
+  height: 0.8em;
+  border-radius: 999px;
+  background: var(--line);
+}
+
+.dialog__pip--on {
+  background: var(--accent);
+}
+
+.dialog__years {
+  margin-left: 0.4em;
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+
+.dialog__npc {
+  margin: 0 0 0.4em;
+  opacity: 0.85;
+}
+
+.dialog__greeting {
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.dialog__card ul {
+  margin: 0.6em 0 0;
+  padding-left: 1.2em;
+}
+
+.dialog__links {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+  margin-top: 0.8em;
+}
+
+.dialog__ok {
+  display: block;
+  margin: 1.4em auto 0;
+}
+
+/* ───────────────────────── Joystick táctil ───────────────────────── */
+
+.joystick {
+  position: absolute;
+  left: 1.2rem;
+  bottom: 1.2rem;
+  width: 7.5rem;
+  height: 7.5rem;
+  border-radius: 999px;
+  background: rgba(253, 251, 244, 0.55);
+  box-shadow: inset 0 0 0 2px rgba(43, 42, 38, 0.15);
+  touch-action: none;
+  z-index: 25;
+  pointer-events: auto;
+}
+
+.joystick__stick {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3.2rem;
+  height: 3.2rem;
+  margin: -1.6rem 0 0 -1.6rem;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 3px 8px rgba(43, 42, 38, 0.3);
+}

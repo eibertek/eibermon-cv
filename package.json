@@ -1,0 +1,38 @@
+{
+  "name": "cv-city",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=20.9"
+  },
+  "scripts": {
+    "dev": "npm run assets:check && next dev",
+    "build": "npm run assets:check && next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "assets:check": "tsx scripts/check-assets.ts",
+    "assets:check:strict": "tsx scripts/check-assets.ts --strict",
+    "assets:prompts": "tsx scripts/export-prompts.ts",
+    "assets:optimize": "node scripts/optimize-models.mjs",
+    "assets:generate": "tsx scripts/generate-meshy.ts"
+  },
+  "dependencies": {
+    "@react-three/drei": "^10.0.0",
+    "@react-three/fiber": "^9.0.0",
+    "next": "^16.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "three": "^0.180.0",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "@gltf-transform/cli": "^4.0.0",
+    "@gltf-transform/core": "^4.0.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/three": "^0.180.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.6.0"
+  }
+}

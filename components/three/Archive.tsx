@@ -11,7 +11,9 @@ export default function Archive() {
   const locale = useGame((s) => s.locale);
 
   return (
-    <group position={[pos[0], 0, pos[1]]}>
+    // Desplazado a +Z del camino (ver archiveZ en world/layout.ts): rota 180° para que el
+    // frente (generado mirando a +Z, igual que los edificios) quede mirando hacia el camino.
+    <group position={[pos[0], 0, pos[1]]} rotation={[0, Math.PI, 0]}>
       <Asset id="archive" />
       {near && <Label position={[0, 2.6, 0]}>{ui("archiveLabel", locale)}</Label>}
     </group>

@@ -63,7 +63,7 @@ export type World = {
 // Medidas del layout (en metros de mundo)
 const TECH_COLS = 4;
 const TECH_SPACING = 3.4;
-const JOB_SPACING = 11;
+const JOB_SPACING = 8;
 const BUILDING_HW = 3.2;
 const BUILDING_HD = 2.6;
 
@@ -131,7 +131,9 @@ function buildWorld(): World {
   };
 
   // ── Panel de trayectoria anterior (entre la avenida y el contacto) ───
+  // Desplazado del centro del camino (z=0): si no, queda parado en medio del paso.
   const archiveX = avenueEnd + 5;
+  const archiveZ = 3.2;
 
   // ── Estación de Contacto (final) ─────────────────────────────────────
   const contactX = archiveX + 6;
@@ -237,7 +239,7 @@ function buildWorld(): World {
       id: "archive",
       kind: "archive",
       ref: "archive",
-      pos: [archiveX, 0],
+      pos: [archiveX, archiveZ],
       radius: 2.4,
       label: { en: "Earlier roles", es: "Trayectoria anterior" },
     },
@@ -254,7 +256,7 @@ function buildWorld(): World {
     })),
     ...jobSpots.map<Obstacle>((j) => ({ kind: "circle", x: j.npc[0], z: j.npc[1], r: 0.5 })),
     { kind: "circle", x: contactX, z: 0, r: 0.8 },
-    { kind: "circle", x: archiveX, z: 0, r: 0.6 },
+    { kind: "circle", x: archiveX, z: archiveZ, r: 0.6 },
   ];
 
   // ── Límites del mundo ────────────────────────────────────────────────
@@ -312,7 +314,7 @@ function buildWorld(): World {
     skills: skillSpots,
     jobs: jobSpots,
     contact: { pos: [contactX, 0], interactId: "contact" },
-    archive: { pos: [archiveX, 0], interactId: "archive" },
+    archive: { pos: [archiveX, archiveZ], interactId: "archive" },
     paths,
     decor,
     interactables,

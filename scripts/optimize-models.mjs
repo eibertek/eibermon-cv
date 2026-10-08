@@ -9,7 +9,6 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readdirSync } from "node:fs";
 import path from "node:path";
-import { NodeIO } from "@gltf-transform/core";
 
 const root = process.cwd();
 const srcDir = path.join(root, "models-src");
@@ -34,24 +33,20 @@ if (!existsSync(bin)) {
   process.exit(1);
 }
 
-const io = new NodeIO();
-
+// La simplificación de malla (decimación) de gltf-transform no es confiable para estos
+// modelos: ya rompió el skinning de los personajes animados (el player salió deformado),
+// y en los edificios (mesh estática, sin animación) le abrió agujeros triangulares en las
+// fachadas de vidrio/detalladas, con un look "post-apocalíptico" en vez de prolijo. El
+// tamaño final no depende de ella — lo que pesa acá es la textura, no el conteo de
+// vértices — así que la sacamos siempre, no solo para los modelos animados.
 for (const file of files) {
   const input = path.join(srcDir, file);
   const output = path.join(outDir, file);
 
-  // La simplificación de malla (decimación) no siempre respeta bien el peso de huesos
-  // en meshes con skin: puede estirar vértices hacia la posición de otro joint durante
-  // la animación. Para modelos animados, saltamos --simplify (igual el tamaño final no
-  // cambia: en estos assets lo que más pesa es la textura, no el conteo de vértices).
-  const doc = await io.read(input);
-  const hasAnimations = doc.getRoot().listAnimations().length > 0;
-
-  const args = ["optimize", input, output, "--compress", "meshopt"];
-  if (hasAnimations) args.push("--simplify", "false");
-
-  console.log(`Optimizando ${file}${hasAnimations ? " (animado: sin simplify)" : ""}...`);
-  execFileSync(bin, args, { stdio: "inherit" });
+  console.log(`Optimizando ${file}...`);
+  execFileSync(bin, ["optimize", input, output, "--compress", "meshopt", "--simplify", "false"], {
+    stdio: "inherit",
+  });
 }
 
 console.log(`Listo: ${files.length} modelo(s) optimizados en public/models/.`);

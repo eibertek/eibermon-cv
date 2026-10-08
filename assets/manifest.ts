@@ -102,7 +102,7 @@ const staticAssets: AssetEntry[] = [
   {
     id: "archive",
     file: fileFor("archive"),
-    prompt: `${STYLE_PREFIX}, an old wooden signpost with a weathered bulletin board, blank surface, no text or writing`,
+    prompt: `${STYLE_PREFIX}, an old wooden signpost with a weathered bulletin board, blank surface, no text or writing, flat board facing +Z`,
     source: "meshy",
     license: MESHY_LICENSE,
     fallback: { shape: "box", color: "#8a6d4b", size: [1.6, 1.9, 0.18] },
@@ -166,12 +166,12 @@ const buildingAssets: AssetEntry[] = buildingTypes.map((t) => ({
   prompt: t.prompt,
   source: "meshy",
   license: MESHY_LICENSE,
-  fallback: { shape: "box", color: "#e3ddcd", size: [6.4, 7, 5.2], roof: "#5c4b51" },
+  fallback: { shape: "box", color: "#e3ddcd", size: [6.4, 14, 5.2], roof: "#5c4b51" },
   maxKB: 2500,
   // Meshy normaliza todo a ~1.9m de alto sin importar lo que diga el prompt ("varios
   // pisos", "6 metros"...) — medido con gltf-transform inspect en los 5 GLB generados.
-  // 3.7 lleva esos ~1.9m a los ~7m de altura que ya usa el fallback.
-  scale: 3.7,
+  // 7.4 lleva esos ~1.9m a ~14m de altura (el doble del primer ajuste, a pedido).
+  scale: 7.4,
   notes: "El frente (puerta) debe mirar hacia +Z. El color final lo pone el tint por código, no el manifest.",
 }));
 

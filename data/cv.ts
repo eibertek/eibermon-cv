@@ -436,14 +436,35 @@ export const cv: CV = {
         greeting: { en: "React one week, Angular the next. You never blinked.", es: "React una semana, Angular la siguiente. Nunca te inmutaste." },
       },
     },
-  ],
-
-  earlierJobs: [
     {
+      id: "ey",
       company: "EY",
       role: { en: "Supervising Associate – Frontend Developer", es: "Supervising Associate – Desarrollador Frontend" },
       period: { en: "April 2017 – January 2019", es: "Abril 2017 – Enero 2019" },
+      summary: {
+        en: "Led the frontend migration of a Visual Studio (C#) project to React, while the backend stayed on Visual C#.",
+        es: "Lideré la migración del frontend de un proyecto de Visual Studio (C#) a React, mientras el backend seguía en Visual C#.",
+      },
+      achievements: [
+        { en: "Migrated a legacy Visual C# frontend to React.js.", es: "Migré un frontend legado en Visual C# a React.js." },
+        {
+          en: "Supervised the frontend workstream as Supervising Associate.",
+          es: "Supervisé el frente de frontend como Supervising Associate.",
+        },
+      ],
+      skills: ["react", "ts"],
+      npc: {
+        name: "Diego",
+        role: { en: "Engagement Manager", es: "Engagement Manager" },
+        greeting: {
+          en: "Supervising Associate — you earned that title migrating this whole thing to React.",
+          es: "Supervising Associate — te ganaste ese título migrando todo esto a React.",
+        },
+      },
     },
+  ],
+
+  earlierJobs: [
     {
       company: "Coderhouse",
       role: { en: "Full-stack Instructor", es: "Profesor FullStack" },

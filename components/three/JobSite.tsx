@@ -57,7 +57,7 @@ export default function JobSite({ spot }: { spot: JobSpot }) {
       <group ref={buildingRef} position={[building[0], 0, building[1]]} rotation={[0, buildingRotY, 0]}>
         <Asset id={buildingType} tint={tint} />
       </group>
-      <Label position={[building[0], 8.8, building[1]]} className="label label--building">
+      <Label position={[building[0], 15.5, building[1]]} className="label label--building">
         <strong>{job.company}</strong>
         <span>{t(job.period, locale)}</span>
       </Label>

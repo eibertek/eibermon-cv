@@ -126,27 +126,27 @@ const skillAssets: AssetEntry[] = cv.skills.map((skill) => ({
  * un GLB nuevo cada vez. Fachadas claras/neutras a propósito: el tinte multiplica el
  * color de la textura, así que arrancar de un color neutro es lo que deja ver bien el tinte.
  */
-const BUILDING_FOOTPRINT = "footprint about 6.4 by 5.2 meters";
+const BUILDING_FOOTPRINT = "footprint about 6.4 by 5.2 meters, several floors tall";
 const buildingTypes: { id: string; prompt: string }[] = [
   {
     id: "building-modern",
-    prompt: `${STYLE_PREFIX}, small modern office building with a flat roof and large front windows, light neutral concrete walls, door on the front facing +Z, ${BUILDING_FOOTPRINT}`,
+    prompt: `${STYLE_PREFIX}, tall modern office building with a flat roof and a grid of large reflective glass windows, light neutral concrete facade, door on the front facing +Z, ${BUILDING_FOOTPRINT}`,
   },
   {
-    id: "building-cottage",
-    prompt: `${STYLE_PREFIX}, cozy building with a pitched gable roof and a small chimney, light neutral walls, door on the front facing +Z, ${BUILDING_FOOTPRINT}`,
+    id: "building-glass",
+    prompt: `${STYLE_PREFIX}, tall contemporary office tower with a sleek glass curtain-wall facade and a flat roof, light neutral frame, door on the front facing +Z, ${BUILDING_FOOTPRINT}`,
   },
   {
     id: "building-tower",
-    prompt: `${STYLE_PREFIX}, narrow building with a flat roof and a row of small square windows stacked vertically, light neutral walls, door on the front facing +Z, ${BUILDING_FOOTPRINT}`,
+    prompt: `${STYLE_PREFIX}, tall narrow office tower with a flat roof and rows of small square windows stacked in a grid, light neutral concrete facade, door on the front facing +Z, ${BUILDING_FOOTPRINT}`,
   },
   {
-    id: "building-dome",
-    prompt: `${STYLE_PREFIX}, quirky building with a rounded dome roof and a round window above the door, light neutral walls, door on the front facing +Z, ${BUILDING_FOOTPRINT}`,
+    id: "building-stepped",
+    prompt: `${STYLE_PREFIX}, tall modern office building with a stepped tiered silhouette, concrete and glass, flat roof, light neutral facade, door on the front facing +Z, ${BUILDING_FOOTPRINT}`,
   },
   {
-    id: "building-workshop",
-    prompt: `${STYLE_PREFIX}, rustic workshop building with a sloped shed roof and a wooden awning over the door, light neutral walls, door on the front facing +Z, ${BUILDING_FOOTPRINT}`,
+    id: "building-corporate",
+    prompt: `${STYLE_PREFIX}, tall sleek corporate office tower with a flat roof, a small rooftop sign panel, glass and steel facade, light neutral walls, door on the front facing +Z, ${BUILDING_FOOTPRINT}`,
   },
 ];
 
@@ -156,7 +156,7 @@ const buildingAssets: AssetEntry[] = buildingTypes.map((t) => ({
   prompt: t.prompt,
   source: "meshy",
   license: MESHY_LICENSE,
-  fallback: { shape: "box", color: "#e3ddcd", size: [6.4, 4, 5.2], roof: "#5c4b51" },
+  fallback: { shape: "box", color: "#e3ddcd", size: [6.4, 7, 5.2], roof: "#5c4b51" },
   maxKB: 2500,
   notes: "El frente (puerta) debe mirar hacia +Z. El color final lo pone el tint por código, no el manifest.",
 }));

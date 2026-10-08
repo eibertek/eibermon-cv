@@ -636,3 +636,105 @@ ul {
   background: var(--accent);
   box-shadow: 0 3px 8px rgba(43, 42, 38, 0.3);
 }
+
+/* ───────────────────────── Batalla de Eibermon ───────────────────────── */
+
+.battle {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #cfe8f3 0%, #cfe8f3 55%, #e3ddcd 55%, #e3ddcd 100%);
+}
+
+.battle__scene {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.battle__creature {
+  width: min(40vw, 220px);
+  height: min(40vw, 220px);
+  animation: battle-float 2.4s ease-in-out infinite;
+}
+
+.battle__creature--shake {
+  animation: battle-shake 0.4s ease-in-out infinite;
+}
+
+.battle__creature-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 10px 14px rgba(43, 42, 38, 0.25));
+}
+
+@keyframes battle-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes battle-shake {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  25% { transform: translateX(-6px) rotate(-4deg); }
+  75% { transform: translateX(6px) rotate(4deg); }
+}
+
+.battle__hpbar {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  width: min(50vw, 220px);
+  height: 0.9rem;
+  background: rgba(253, 251, 244, 0.85);
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.battle__hpbar-fill {
+  height: 100%;
+  background: #4caf63;
+  transition: width 0.25s ease;
+}
+
+.battle__box {
+  background: var(--paper);
+  border-top: 3px solid var(--line);
+  padding: 1.4rem 1.6rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7em;
+  max-width: 30rem;
+  margin: 0 auto;
+  width: 100%;
+  border-radius: var(--radius) var(--radius) 0 0;
+  box-shadow: var(--shadow);
+}
+
+.battle__text {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.4;
+}
+
+.battle__actions {
+  display: flex;
+  gap: 0.6em;
+  flex-wrap: wrap;
+}
+
+.battle__level {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+}
+
+.battle__description {
+  margin: 0;
+  line-height: 1.5;
+  opacity: 0.9;
+}

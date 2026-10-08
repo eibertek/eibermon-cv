@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { input, resetInput, type Dir } from "./input";
 import { useGame } from "./store";
+import { interactableById } from "../world/layout";
 
 const MOVE_KEYS: Record<string, Dir> = {
   KeyW: "up",
@@ -32,7 +33,7 @@ export function useKeyboard(): void {
       if (s.classicOpen || !s.started) return;
 
       if (s.dialogId) {
-        if (isInteractKey(e.code)) {
+        if (isInteractKey(e.code) && interactableById.get(s.dialogId)?.kind !== "skill") {
           e.preventDefault();
           s.closeDialog();
         }

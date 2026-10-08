@@ -4,7 +4,7 @@ import { cv } from "../data/cv";
 import { useGame } from "../game/store";
 import { interactableById, type Interactable } from "../world/layout";
 
-/** Modal de contenido: se abre al interactuar con una skill, un trabajo o el buzón. */
+/** Modal de contenido: se abre al interactuar con un trabajo o el buzón (las skills usan BattleModal). */
 export default function Dialog() {
   const dialogId = useGame((s) => s.dialogId);
   const closeDialog = useGame((s) => s.closeDialog);
@@ -12,6 +12,7 @@ export default function Dialog() {
   if (!dialogId) return null;
   const interactable = interactableById.get(dialogId);
   if (!interactable) return null;
+  if (interactable.kind === "skill") return null;
 
   return (
     <div className="dialog" role="dialog" aria-modal="true" onClick={closeDialog}>
@@ -29,26 +30,6 @@ export default function Dialog() {
 }
 
 function DialogBody({ interactable }: { interactable: Interactable }) {
-  if (interactable.kind === "skill") {
-    const skill = cv.skills.find((s) => s.id === interactable.ref);
-    if (!skill) return null;
-    return (
-      <>
-        <p className="dialog__eyebrow">
-          {skill.category === "tech" ? "Tecnología" : "Habilidad blanda"} · {skill.area}
-        </p>
-        <h2>{skill.name}</h2>
-        <div className="dialog__level" aria-label={`Nivel ${skill.level} de 5`}>
-          {[1, 2, 3, 4, 5].map((n) => (
-            <span key={n} className={n <= skill.level ? "dialog__pip dialog__pip--on" : "dialog__pip"} />
-          ))}
-          {skill.years !== undefined && <span className="dialog__years">{skill.years} años</span>}
-        </div>
-        <p>{skill.description}</p>
-      </>
-    );
-  }
-
   if (interactable.kind === "job") {
     const job = cv.jobs.find((j) => j.id === interactable.ref);
     if (!job) return null;

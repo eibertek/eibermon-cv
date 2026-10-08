@@ -64,8 +64,10 @@ export type World = {
 const TECH_COLS = 4;
 const TECH_SPACING = 3.4;
 const JOB_SPACING = 8;
-const BUILDING_HW = 3.2;
-const BUILDING_HD = 2.6;
+// Cubre el footprint real más grande de los 5 tipos de edificio (medido con
+// gltf-transform tras aplicar el scale de 7.4): building-modern sale ~6.87×6.09m.
+const BUILDING_HW = 3.6;
+const BUILDING_HD = 3.3;
 
 function mulberry32(seed: number): () => number {
   let a = seed;

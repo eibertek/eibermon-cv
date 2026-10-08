@@ -137,26 +137,31 @@ const skillAssets: AssetEntry[] = cv.skills.map((skill) => ({
  * color de la textura, así que arrancar de un color neutro es lo que deja ver bien el tinte.
  */
 const BUILDING_FOOTPRINT = "footprint about 6.4 by 5.2 meters, several floors tall";
+// "Glass"/"reflective"/"curtain-wall" wording kept producing a shattered, cracked-looking
+// facade (bad texture/geometry from Meshy, not a post-processing artifact — confirmed by
+// re-optimizing without fixing it). Windows are now flat painted rectangles on a solid
+// wall, explicitly undamaged, no glass/transparency anywhere.
+const SAFE_FACADE = "solid pristine undamaged matte walls, flat painted rectangular windows (not glass, not transparent), no cracks, no damage";
 const buildingTypes: { id: string; prompt: string }[] = [
   {
     id: "building-modern",
-    prompt: `${STYLE_PREFIX}, tall modern office building with a flat roof and a grid of large reflective glass windows, light neutral concrete facade, door on the front facing +Z, ${BUILDING_FOOTPRINT}`,
+    prompt: `${STYLE_PREFIX}, tall modern office building with a flat roof and a grid of flat painted windows on a light concrete facade, ${SAFE_FACADE}, door on the front facing +Z, ${BUILDING_FOOTPRINT}`,
   },
   {
     id: "building-glass",
-    prompt: `${STYLE_PREFIX}, tall contemporary office tower with a sleek glass curtain-wall facade and a flat roof, light neutral frame, door on the front facing +Z, ${BUILDING_FOOTPRINT}`,
+    prompt: `${STYLE_PREFIX}, tall contemporary office tower with a flat roof and a grid of flat painted facade panels in a light neutral tone, ${SAFE_FACADE}, door on the front facing +Z, ${BUILDING_FOOTPRINT}`,
   },
   {
     id: "building-tower",
-    prompt: `${STYLE_PREFIX}, tall narrow office tower with a flat roof and rows of small square windows stacked in a grid, light neutral concrete facade, door on the front facing +Z, ${BUILDING_FOOTPRINT}`,
+    prompt: `${STYLE_PREFIX}, tall narrow office tower with a flat roof and rows of small flat painted square windows stacked in a grid, light concrete facade, ${SAFE_FACADE}, door on the front facing +Z, ${BUILDING_FOOTPRINT}`,
   },
   {
     id: "building-stepped",
-    prompt: `${STYLE_PREFIX}, tall modern office building with a stepped tiered silhouette, concrete and glass, flat roof, light neutral facade, door on the front facing +Z, ${BUILDING_FOOTPRINT}`,
+    prompt: `${STYLE_PREFIX}, tall modern office building with a stepped tiered silhouette, solid concrete facade, ${SAFE_FACADE}, flat roof, door on the front facing +Z, ${BUILDING_FOOTPRINT}`,
   },
   {
     id: "building-corporate",
-    prompt: `${STYLE_PREFIX}, tall sleek corporate office tower with a flat roof, a small rooftop antenna, glass and steel facade, light neutral walls, door on the front facing +Z, ${BUILDING_FOOTPRINT}`,
+    prompt: `${STYLE_PREFIX}, tall sleek corporate office tower with a flat roof, a small rooftop antenna, solid steel-grey panel facade, ${SAFE_FACADE}, door on the front facing +Z, ${BUILDING_FOOTPRINT}`,
   },
 ];
 

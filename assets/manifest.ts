@@ -168,6 +168,10 @@ const buildingAssets: AssetEntry[] = buildingTypes.map((t) => ({
   license: MESHY_LICENSE,
   fallback: { shape: "box", color: "#e3ddcd", size: [6.4, 7, 5.2], roof: "#5c4b51" },
   maxKB: 2500,
+  // Meshy normaliza todo a ~1.9m de alto sin importar lo que diga el prompt ("varios
+  // pisos", "6 metros"...) — medido con gltf-transform inspect en los 5 GLB generados.
+  // 3.7 lleva esos ~1.9m a los ~7m de altura que ya usa el fallback.
+  scale: 3.7,
   notes: "El frente (puerta) debe mirar hacia +Z. El color final lo pone el tint por código, no el manifest.",
 }));
 

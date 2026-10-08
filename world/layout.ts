@@ -231,7 +231,6 @@ function buildWorld(): World {
 
   // ── Obstáculos (colisiones) ──────────────────────────────────────────
   const obstacles: Obstacle[] = [
-    ...skillSpots.map<Obstacle>((s) => ({ kind: "circle", x: s.pos[0], z: s.pos[1], r: 0.75 })),
     ...jobSpots.map<Obstacle>((j) => ({
       kind: "rect",
       x: j.building[0],

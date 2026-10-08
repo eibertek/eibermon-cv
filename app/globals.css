@@ -19,6 +19,10 @@ html,
 body {
   margin: 0;
   height: 100%;
+  /* Sin esto, cualquier desborde (ej: 100vh en mobile no coincide con el viewport
+     real cuando aparece/desaparece la barra del navegador) deja scrollear toda la
+     página en vez de quedarse contenido dentro de .game o .cvpage. */
+  overflow: hidden;
   background: var(--bg);
   color: var(--ink);
   font-family: "Segoe UI", system-ui, -apple-system, Helvetica, Arial, sans-serif;
@@ -113,6 +117,11 @@ ul {
   position: relative;
   width: 100vw;
   height: 100vh;
+  /* dvh/dvw: el viewport "real" en mobile (se ajusta cuando aparece/desaparece la
+     barra del navegador). Donde no existe, el navegador ignora la línea y se queda
+     con el 100vw/100vh de arriba. */
+  width: 100dvw;
+  height: 100dvh;
   overflow: hidden;
   touch-action: none;
 }
@@ -123,6 +132,8 @@ ul {
   justify-content: center;
   width: 100vw;
   height: 100vh;
+  width: 100dvw;
+  height: 100dvh;
   background: var(--bg);
   color: var(--ink);
   font-weight: 600;
@@ -181,6 +192,8 @@ ul {
   position: relative;
   max-width: 30rem;
   width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
   background: var(--paper);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
@@ -316,7 +329,10 @@ ul {
   display: flex;
   justify-content: center;
   padding: 3rem 1.2rem;
-  min-height: 100vh;
+  /* body es overflow:hidden (ver arriba), así que esta página se scrollea sola. */
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
   background: var(--paper-dim);
 }
 

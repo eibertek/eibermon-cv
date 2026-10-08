@@ -362,7 +362,7 @@ export const cv: CV = {
       ],
       skills: ["next", "react", "contentful", "ts"],
       npc: {
-        name: "Valentina",
+        name: "Pedro",
         role: { en: "Tech Lead", es: "Tech Lead" },
         greeting: { en: "Ask him about Contentful. No, really, ask him.", es: "Preguntale por Contentful. En serio, preguntale." },
       },

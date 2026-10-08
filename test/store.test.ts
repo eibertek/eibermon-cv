@@ -12,6 +12,7 @@ function resetStore() {
     camRot: 0,
     teleport: null,
     character: "female",
+    locale: "en",
   });
 }
 
@@ -26,11 +27,11 @@ test("interact() on a skill opens the dialog but does not discover it yet", () =
 
 test("interact() on a job discovers it immediately", () => {
   resetStore();
-  useGame.getState().setNearby("job:estudio-pixel");
+  useGame.getState().setNearby("job:happyfuncorp");
   useGame.getState().interact();
   const state = useGame.getState();
-  assert.equal(state.dialogId, "job:estudio-pixel");
-  assert.equal(state.discovered.includes("job:estudio-pixel"), true);
+  assert.equal(state.dialogId, "job:happyfuncorp");
+  assert.equal(state.discovered.includes("job:happyfuncorp"), true);
 });
 
 test("catchSkill() discovers a skill", () => {

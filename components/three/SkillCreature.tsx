@@ -1,6 +1,8 @@
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import type { Group } from "three";
+// alias: dentro de useFrame ya hay una variable local `t` (tiempo del reloj).
+import { t as translate } from "../../data/i18n";
 import { useGame } from "../../game/store";
 import type { SkillSpot } from "../../world/layout";
 import { skillColor } from "../../world/theme";
@@ -24,6 +26,7 @@ export default function SkillCreature({ spot }: { spot: SkillSpot }) {
   const floating = useRef<Group>(null);
   const discovered = useGame((s) => s.discovered.includes(interactId));
   const near = useGame((s) => s.nearbyId === interactId);
+  const locale = useGame((s) => s.locale);
   const color = skillColor(skill);
 
   const offset = useRef({ x: 0, z: 0 });
@@ -69,7 +72,7 @@ export default function SkillCreature({ spot }: { spot: SkillSpot }) {
         <Asset id={`skill-${skill.id}`} />
       </group>
 
-      {near && <Label position={[0, 2.6, 0]}>{skill.name}</Label>}
+      {near && <Label position={[0, 2.6, 0]}>{translate(skill.name, locale)}</Label>}
     </group>
   );
 }

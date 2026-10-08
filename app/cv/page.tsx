@@ -4,13 +4,13 @@ import { cv } from "../../data/cv";
 
 export const metadata: Metadata = {
   title: `${cv.profile.name} · CV`,
-  description: cv.profile.summary,
+  description: cv.profile.summary.en,
 };
 
 export default function CVPage() {
   return (
     <main className="cvpage">
-      <CVContent />
+      <CVContent locale="en" />
     </main>
   );
 }

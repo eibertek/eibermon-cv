@@ -178,6 +178,7 @@ ul {
 }
 
 .start__card {
+  position: relative;
   max-width: 30rem;
   width: 100%;
   background: var(--paper);
@@ -185,6 +186,14 @@ ul {
   box-shadow: var(--shadow);
   padding: 2rem;
   text-align: center;
+}
+
+.start__lang {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.4em 0.9em;
+  font-size: 0.8rem;
 }
 
 .start__eyebrow {
@@ -402,6 +411,19 @@ ul {
   padding-left: 1.2em;
 }
 
+.cv__earlier {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+  font-size: 0.9rem;
+}
+
+.cv__earlier span {
+  opacity: 0.6;
+}
+
 /* ───────────────────────── HUD ───────────────────────── */
 
 .hud {
@@ -608,6 +630,23 @@ ul {
   flex-direction: column;
   gap: 0.4em;
   margin-top: 0.8em;
+}
+
+.dialog__archive {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  margin-top: 0.8em;
+  max-height: 40vh;
+  overflow-y: auto;
+  font-size: 0.9rem;
+}
+
+.dialog__archive-period {
+  opacity: 0.6;
+  font-size: 0.85em;
 }
 
 .dialog__ok {

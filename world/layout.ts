@@ -1,4 +1,5 @@
 import { cv, type Job, type Skill } from "../data/cv";
+import type { Text } from "../data/i18n";
 
 export type Vec2 = [number, number];
 
@@ -6,23 +7,23 @@ export type Obstacle =
   | { kind: "rect"; x: number; z: number; hw: number; hd: number }
   | { kind: "circle"; x: number; z: number; r: number };
 
-export type InteractKind = "skill" | "job" | "contact";
+export type InteractKind = "skill" | "job" | "contact" | "archive";
 
 export type Interactable = {
-  /** "skill:ts" | "job:nube-labs" | "contact" */
+  /** "skill:ts" | "job:nube-labs" | "contact" | "archive" */
   id: string;
   kind: InteractKind;
-  /** id dentro de data/cv.ts ("contact" para el buzón) */
+  /** id dentro de data/cv.ts ("contact"/"archive" no tienen una entrada propia) */
   ref: string;
   pos: Vec2;
   radius: number;
-  label: string;
+  label: Text;
 };
 
 export type District = {
   id: string;
-  name: string;
-  tagline: string;
+  name: Text;
+  tagline: Text;
   center: Vec2;
   /** ancho (x) y fondo (z) del piso; en círculos, el diámetro está en size[0] */
   size: Vec2;
@@ -51,6 +52,7 @@ export type World = {
   skills: SkillSpot[];
   jobs: JobSpot[];
   contact: { pos: Vec2; interactId: string };
+  archive: { pos: Vec2; interactId: string };
   paths: PathRect[];
   decor: Decor[];
   interactables: Interactable[];
@@ -84,8 +86,8 @@ function buildWorld(): World {
   const plazaEdge = plazaRadius + 2.5;
   const plaza: District = {
     id: "plaza",
-    name: "Plaza de las Soft Skills",
-    tagline: "Lo que no se aprende con un tutorial",
+    name: { en: "Soft Skills Plaza", es: "Plaza de las Soft Skills" },
+    tagline: { en: "What a tutorial can't teach you", es: "Lo que no se aprende con un tutorial" },
     center: [0, 0],
     size: [plazaEdge * 2, plazaEdge * 2],
     shape: "circle",
@@ -102,8 +104,8 @@ function buildWorld(): World {
   const techCenterX = -plazaEdge - techGap - techW / 2;
   const tech: District = {
     id: "tech",
-    name: "Barrio Tech",
-    tagline: "Las herramientas del oficio",
+    name: { en: "Tech District", es: "Barrio Tech" },
+    tagline: { en: "The tools of the trade", es: "Las herramientas del oficio" },
     center: [techCenterX, 0],
     size: [techW, techD],
     shape: "rect",
@@ -119,8 +121,8 @@ function buildWorld(): World {
   const avenueEnd = lastJobX + 9;
   const experience: District = {
     id: "experience",
-    name: "Avenida de la Experiencia",
-    tagline: "Los lugares donde crecí",
+    name: { en: "Avenue of Experience", es: "Avenida de la Experiencia" },
+    tagline: { en: "The places where I grew", es: "Los lugares donde crecí" },
     center: [(avenueStart + avenueEnd) / 2, 0],
     size: [avenueEnd - avenueStart, 17],
     shape: "rect",
@@ -128,12 +130,15 @@ function buildWorld(): World {
     color: "#e6e0d4",
   };
 
+  // ── Panel de trayectoria anterior (entre la avenida y el contacto) ───
+  const archiveX = avenueEnd + 5;
+
   // ── Estación de Contacto (final) ─────────────────────────────────────
-  const contactX = avenueEnd + 5;
+  const contactX = archiveX + 6;
   const contactDistrict: District = {
     id: "contact",
-    name: "Estación de Contacto",
-    tagline: "¿Hablamos?",
+    name: { en: "Contact Station", es: "Estación de Contacto" },
+    tagline: { en: "Shall we talk?", es: "¿Hablamos?" },
     center: [contactX, 0],
     size: [9, 9],
     shape: "circle",
@@ -217,7 +222,8 @@ function buildWorld(): World {
       ref: j.job.id,
       pos: j.npc,
       radius: 2.6,
-      label: j.job.npc.name,
+      // Nombre propio: mismo texto en los dos idiomas.
+      label: { en: j.job.npc.name, es: j.job.npc.name },
     })),
     {
       id: "contact",
@@ -225,7 +231,15 @@ function buildWorld(): World {
       ref: "contact",
       pos: [contactX, 0],
       radius: 2.8,
-      label: "Buzón de contacto",
+      label: { en: "Contact mailbox", es: "Buzón de contacto" },
+    },
+    {
+      id: "archive",
+      kind: "archive",
+      ref: "archive",
+      pos: [archiveX, 0],
+      radius: 2.4,
+      label: { en: "Earlier roles", es: "Trayectoria anterior" },
     },
   ];
 
@@ -240,6 +254,7 @@ function buildWorld(): World {
     })),
     ...jobSpots.map<Obstacle>((j) => ({ kind: "circle", x: j.npc[0], z: j.npc[1], r: 0.5 })),
     { kind: "circle", x: contactX, z: 0, r: 0.8 },
+    { kind: "circle", x: archiveX, z: 0, r: 0.6 },
   ];
 
   // ── Límites del mundo ────────────────────────────────────────────────
@@ -297,6 +312,7 @@ function buildWorld(): World {
     skills: skillSpots,
     jobs: jobSpots,
     contact: { pos: [contactX, 0], interactId: "contact" },
+    archive: { pos: [archiveX, 0], interactId: "archive" },
     paths,
     decor,
     interactables,

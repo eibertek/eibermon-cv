@@ -1,21 +1,24 @@
 "use client";
 
 import { cv } from "../data/cv";
+import { t, ui, type StringKey } from "../data/i18n";
 import { type Character, useGame } from "../game/store";
 
-const CHARACTERS: { id: Character; label: string }[] = [
-  { id: "female", label: "Mujer" },
-  { id: "male", label: "Varón" },
+const CHARACTERS: { id: Character; labelKey: StringKey }[] = [
+  { id: "female", labelKey: "characterFemale" },
+  { id: "male", labelKey: "characterMale" },
 ];
 
 export default function StartScreen() {
   const started = useGame((s) => s.started);
   const discovered = useGame((s) => s.discovered);
   const character = useGame((s) => s.character);
+  const locale = useGame((s) => s.locale);
   const start = useGame((s) => s.start);
   const setClassic = useGame((s) => s.setClassic);
   const resetProgress = useGame((s) => s.resetProgress);
   const setCharacter = useGame((s) => s.setCharacter);
+  const setLocale = useGame((s) => s.setLocale);
 
   if (started) return null;
 
@@ -24,12 +27,16 @@ export default function StartScreen() {
   return (
     <div className="start">
       <div className="start__card">
-        <p className="start__eyebrow">CV jugable</p>
-        <h1>{cv.profile.name}</h1>
-        <p className="start__title">{cv.profile.title}</p>
-        <p className="start__summary">{cv.profile.summary}</p>
+        <button className="btn start__lang" onClick={() => setLocale(locale === "en" ? "es" : "en")}>
+          {ui("languageToggle", locale)}
+        </button>
 
-        <div className="start__characters" role="radiogroup" aria-label="Elegí tu personaje">
+        <p className="start__eyebrow">{ui("gameTitle", locale)}</p>
+        <h1>{cv.profile.name}</h1>
+        <p className="start__title">{t(cv.profile.title, locale)}</p>
+        <p className="start__summary">{t(cv.profile.summary, locale)}</p>
+
+        <div className="start__characters" role="radiogroup" aria-label={ui("chooseCharacter", locale)}>
           {CHARACTERS.map((c) => (
             <button
               key={c.id}
@@ -39,37 +46,31 @@ export default function StartScreen() {
               className={character === c.id ? "start__character start__character--active" : "start__character"}
               onClick={() => setCharacter(c.id)}
             >
-              {c.label}
+              {ui(c.labelKey, locale)}
             </button>
           ))}
         </div>
 
         <ul className="start__help">
-          <li className="desktop-only">
-            <kbd>WASD</kbd> o flechas para caminar
-          </li>
-          <li className="desktop-only">
-            <kbd>E</kbd> o <kbd>Espacio</kbd> para interactuar
-          </li>
-          <li className="desktop-only">
-            <kbd>Q</kbd> y <kbd>R</kbd> para rotar la cámara
-          </li>
-          <li className="touch-only">Usá el joystick para caminar y el botón para interactuar</li>
-          <li>Acercate a los objetos y a las personas para descubrir mi recorrido</li>
+          <li className="desktop-only">{ui("helpMove", locale)}</li>
+          <li className="desktop-only">{ui("helpInteract", locale)}</li>
+          <li className="desktop-only">{ui("helpCamera", locale)}</li>
+          <li className="touch-only">{ui("helpTouch", locale)}</li>
+          <li>{ui("helpDiscover", locale)}</li>
         </ul>
 
         <div className="start__actions">
           <button className="btn btn--primary" onClick={start} autoFocus>
-            {hasProgress ? "Continuar" : "Empezar"}
+            {hasProgress ? ui("continue", locale) : ui("start", locale)}
           </button>
           <button className="btn" onClick={() => setClassic(true)}>
-            Ver CV clásico
+            {ui("seeClassicCv", locale)}
           </button>
         </div>
 
         {hasProgress && (
           <button className="link" onClick={resetProgress}>
-            Reiniciar progreso
+            {ui("resetProgress", locale)}
           </button>
         )}
       </div>

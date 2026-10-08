@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import type { Locale } from "../data/i18n";
 import { interactableById } from "../world/layout";
 
 type Teleport = { x: number; z: number };
@@ -18,6 +19,8 @@ type GameState = {
   teleport: Teleport | null;
   /** personaje elegido en la pantalla de inicio (se guarda en localStorage) */
   character: Character;
+  /** idioma activo (se guarda en localStorage), inglés por defecto */
+  locale: Locale;
 
   start: () => void;
   setNearby: (id: string | null) => void;
@@ -30,6 +33,7 @@ type GameState = {
   resetProgress: () => void;
   setCharacter: (character: Character) => void;
   catchSkill: (id: string) => void;
+  setLocale: (locale: Locale) => void;
 };
 
 export const useGame = create<GameState>()(
@@ -43,6 +47,7 @@ export const useGame = create<GameState>()(
       camRot: 0,
       teleport: null,
       character: "female",
+      locale: "en",
 
       start: () => set({ started: true }),
       setNearby: (id) => set({ nearbyId: id }),
@@ -69,11 +74,12 @@ export const useGame = create<GameState>()(
         set((s) => ({
           discovered: s.discovered.includes(id) ? s.discovered : [...s.discovered, id],
         })),
+      setLocale: (locale) => set({ locale }),
     }),
     {
       name: "cv-city-progress",
-      version: 1,
-      partialize: (s) => ({ discovered: s.discovered, character: s.character }),
+      version: 2,
+      partialize: (s) => ({ discovered: s.discovered, character: s.character, locale: s.locale }),
     },
   ),
 );

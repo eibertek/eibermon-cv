@@ -99,6 +99,16 @@ const staticAssets: AssetEntry[] = [
     fallback: { shape: "box", color: "#d62828", size: [0.9, 1.4, 0.7] },
     maxKB: 600,
   },
+  {
+    id: "archive",
+    file: fileFor("archive"),
+    prompt: `${STYLE_PREFIX}, an old wooden signpost with a weathered bulletin board, blank surface, no text or writing`,
+    source: "meshy",
+    license: MESHY_LICENSE,
+    fallback: { shape: "box", color: "#8a6d4b", size: [1.6, 1.9, 0.18] },
+    maxKB: 600,
+    notes: "Superficie en blanco a propósito: el contenido lo muestra el Dialog, no el modelo.",
+  },
 ];
 
 const skillAssets: AssetEntry[] = cv.skills.map((skill) => ({
@@ -106,7 +116,7 @@ const skillAssets: AssetEntry[] = cv.skills.map((skill) => ({
   file: fileFor(`skill-${skill.id}`),
   prompt:
     skill.assetPrompt ??
-    `${STYLE_PREFIX}, a magical floating crystal totem symbolizing ${skill.name}, ${
+    `${STYLE_PREFIX}, a magical floating crystal totem symbolizing ${skill.name.en}, ${
       skill.category === "tech" ? "futuristic tech vibe" : "warm friendly vibe"
     }`,
   source: "meshy",
@@ -168,7 +178,7 @@ const npcAssets: AssetEntry[] = cv.jobs.map((job, index) => ({
   file: fileFor(`npc-${job.id}`),
   prompt:
     job.npcPrompt ??
-    `${STYLE_PREFIX}, friendly cartoon character, ${job.npc.role}, A-pose, full body`,
+    `${STYLE_PREFIX}, friendly cartoon character, ${job.npc.role.en}, A-pose, full body`,
   source: "meshy",
   license: MESHY_LICENSE,
   fallback: { shape: "capsule", color: jobColor(job, index), size: [0.8, 1.7, 0.8] },

@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import type { Group, Mesh } from "three";
 import { buildingTypeIds } from "../../assets/manifest";
+import { t } from "../../data/i18n";
 import { registerOccluder } from "../../game/occluders";
 import { dampAngle } from "../../game/math";
 import { playerState } from "../../game/playerState";
@@ -19,6 +20,7 @@ export default function JobSite({ spot }: { spot: JobSpot }) {
   const buildingRef = useRef<Group>(null);
   const discovered = useGame((s) => s.discovered.includes(interactId));
   const near = useGame((s) => s.nearbyId === interactId);
+  const locale = useGame((s) => s.locale);
 
   const buildingType = buildingTypeIds[index % buildingTypeIds.length];
   const tint = jobColor(job, index);
@@ -57,7 +59,7 @@ export default function JobSite({ spot }: { spot: JobSpot }) {
       </group>
       <Label position={[building[0], 8.8, building[1]]} className="label label--building">
         <strong>{job.company}</strong>
-        <span>{job.period}</span>
+        <span>{t(job.period, locale)}</span>
       </Label>
 
       <group position={[npc[0], 0, npc[1]]}>

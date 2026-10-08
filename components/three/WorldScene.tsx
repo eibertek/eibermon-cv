@@ -1,4 +1,7 @@
+import { t } from "../../data/i18n";
+import { useGame } from "../../game/store";
 import { world, type District } from "../../world/layout";
+import Archive from "./Archive";
 import { Asset } from "./Asset";
 import Contact from "./Contact";
 import JobSite from "./JobSite";
@@ -6,6 +9,7 @@ import Label from "./Label";
 import SkillCreature from "./SkillCreature";
 
 function DistrictFloor({ district }: { district: District }) {
+  const locale = useGame((s) => s.locale);
   const [cx, cz] = district.center;
   const [w, d] = district.size;
 
@@ -20,8 +24,8 @@ function DistrictFloor({ district }: { district: District }) {
         <meshStandardMaterial color={district.color} />
       </mesh>
       <Label position={[cx, 0.3, cz - d / 2 + 0.9]} className="label label--district">
-        <strong>{district.name}</strong>
-        <span>{district.tagline}</span>
+        <strong>{t(district.name, locale)}</strong>
+        <span>{t(district.tagline, locale)}</span>
       </Label>
     </group>
   );
@@ -60,6 +64,7 @@ export default function WorldScene() {
       ))}
 
       <Contact />
+      <Archive />
 
       {world.decor.map((item, i) => (
         <Asset

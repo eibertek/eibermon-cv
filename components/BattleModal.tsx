@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { cv, type Skill } from "../data/cv";
+import { t, ui, type Locale } from "../data/i18n";
 import BattleCreature from "./BattleCreature";
 import { beginFight, createBattleState, throwBall, throwRay, type BattleState } from "../game/battle";
 import { useGame } from "../game/store";
@@ -10,6 +11,7 @@ import { interactableById } from "../world/layout";
 /** Modal de batalla: reemplaza a Dialog para las skills (kind === "skill"). */
 export default function BattleModal() {
   const dialogId = useGame((s) => s.dialogId);
+  const locale = useGame((s) => s.locale);
   if (!dialogId) return null;
   const interactable = interactableById.get(dialogId);
   if (!interactable || interactable.kind !== "skill") return null;
@@ -17,12 +19,20 @@ export default function BattleModal() {
   if (!skill) return null;
 
   // key={dialogId}: cada encuentro arranca la fase de batalla de cero.
-  return <BattleModalContent key={dialogId} dialogId={dialogId} skill={skill} />;
+  return <BattleModalContent key={dialogId} dialogId={dialogId} skill={skill} locale={locale} />;
 }
 
 const THROW_DURATION_MS = 500;
 
-function BattleModalContent({ dialogId, skill }: { dialogId: string; skill: Skill }) {
+function BattleModalContent({
+  dialogId,
+  skill,
+  locale,
+}: {
+  dialogId: string;
+  skill: Skill;
+  locale: Locale;
+}) {
   const closeDialog = useGame((s) => s.closeDialog);
   const catchSkill = useGame((s) => s.catchSkill);
   const [battle, setBattle] = useState<BattleState>(() => createBattleState(skill.level));
@@ -57,8 +67,15 @@ function BattleModalContent({ dialogId, skill }: { dialogId: string; skill: Skil
     }, THROW_DURATION_MS);
   }
 
+  const skillName = t(skill.name, locale);
+
   return (
-    <div className="battle" role="dialog" aria-modal="true" aria-label={`Batalla contra ${skill.name}`}>
+    <div
+      className="battle"
+      role="dialog"
+      aria-modal="true"
+      aria-label={ui("battleAgainstTemplate", locale).replace("{skill}", skillName)}
+    >
       <div className="battle__scene">
         <BattleCreature skillId={skill.id} shaking={throwing} />
         {zapId > 0 && <div key={zapId} className="battle__zap" />}
@@ -73,13 +90,15 @@ function BattleModalContent({ dialogId, skill }: { dialogId: string; skill: Skil
       <div className="battle__box">
         {battle.phase === "intro" && (
           <>
-            <p className="battle__text">¡Un Eibermon salvaje apareció! Es {skill.name}.</p>
+            <p className="battle__text">
+              {ui("wildEibermonAppeared", locale)} {skillName}.
+            </p>
             <div className="battle__actions">
               <button className="btn btn--primary" onClick={() => setBattle((b) => beginFight(b))}>
-                ¡Empezar!
+                {ui("start", locale)}!
               </button>
               <button className="btn" onClick={closeDialog}>
-                Huir
+                {ui("flee", locale)}
               </button>
             </div>
           </>
@@ -87,13 +106,15 @@ function BattleModalContent({ dialogId, skill }: { dialogId: string; skill: Skil
 
         {battle.phase === "fighting" && (
           <>
-            <p className="battle__text">{skill.name} se resiste. ¡Atacalo con un rayo!</p>
+            <p className="battle__text">
+              {skillName} {ui("resists", locale)}
+            </p>
             <div className="battle__actions">
               <button className="btn btn--primary" onClick={handleRay}>
-                Rayo
+                {ui("ray", locale)}
               </button>
               <button className="btn" onClick={closeDialog}>
-                Huir
+                {ui("flee", locale)}
               </button>
             </div>
           </>
@@ -101,15 +122,13 @@ function BattleModalContent({ dialogId, skill }: { dialogId: string; skill: Skil
 
         {battle.phase === "catching" && (
           <>
-            <p className="battle__text">
-              {throwing ? "¡Lanzaste la Eiberball!" : `¡${skill.name} está débil! Es el momento de atraparlo.`}
-            </p>
+            <p className="battle__text">{throwing ? ui("threwEiberball", locale) : `${skillName} ${ui("weak", locale)}`}</p>
             <div className="battle__actions">
               <button className="btn btn--primary" onClick={handleBall} disabled={throwing}>
-                ¡Eiberball!
+                {ui("eiberball", locale)}
               </button>
               <button className="btn" onClick={closeDialog} disabled={throwing}>
-                Huir
+                {ui("flee", locale)}
               </button>
             </div>
           </>
@@ -117,19 +136,28 @@ function BattleModalContent({ dialogId, skill }: { dialogId: string; skill: Skil
 
         {battle.phase === "caught" && (
           <>
-            <p className="battle__text">¡Atrapado! Sumaste a {skill.name} a tu Eibermon.</p>
-            <p className="dialog__eyebrow">
-              {skill.category === "tech" ? "Tecnología" : "Habilidad blanda"} · {skill.area}
+            <p className="battle__text">
+              {ui("caught", locale)} {skillName} {ui("toYourEibermon", locale)}
             </p>
-            <div className="battle__level" aria-label={`Nivel ${skill.level} de 5`}>
+            <p className="dialog__eyebrow">
+              {skill.category === "tech" ? ui("technology", locale) : ui("softSkill", locale)} · {t(skill.area, locale)}
+            </p>
+            <div
+              className="battle__level"
+              aria-label={ui("levelAriaTemplate", locale).replace("{n}", String(skill.level))}
+            >
               {[1, 2, 3, 4, 5].map((n) => (
                 <span key={n} className={n <= skill.level ? "dialog__pip dialog__pip--on" : "dialog__pip"} />
               ))}
-              {skill.years !== undefined && <span className="dialog__years">{skill.years} años</span>}
+              {skill.years !== undefined && (
+                <span className="dialog__years">
+                  {skill.years} {ui("years", locale)}
+                </span>
+              )}
             </div>
-            <p className="battle__description">{skill.description}</p>
+            <p className="battle__description">{t(skill.description, locale)}</p>
             <button className="btn btn--primary" onClick={closeDialog}>
-              Seguir caminando
+              {ui("keepWalking", locale)}
             </button>
           </>
         )}

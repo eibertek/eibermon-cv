@@ -713,15 +713,19 @@ ul {
   position: relative;
   flex: 1;
   min-height: 0;
+  /* Sin esto el canvas (chico y centrado) flotaba en el medio de un área enorme,
+     dejando un hueco grande entre la criatura y la caja de botones. */
+  max-height: 60vh;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  padding: 1.5rem;
 }
 
 .battle__creature-canvas {
-  width: min(55vw, 45vh, 320px);
-  height: min(55vw, 45vh, 320px);
+  width: 100%;
+  height: 100%;
 }
 
 .battle__zap {

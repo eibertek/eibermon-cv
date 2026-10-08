@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Box3, Vector3, type Group } from "three";
+import { Box3, Vector3, type Group, type PerspectiveCamera } from "three";
 import { Asset } from "./three/Asset";
 
 /**
@@ -37,7 +37,16 @@ function FramedCreature({ skillId, shaking }: { skillId: string; shaking: boolea
     const radius = Math.max(size.x, size.y, size.z) * 0.5;
     if (Math.abs(radius - lastRadius.current) / (lastRadius.current || radius || 1) > 0.2) {
       const center = box.getCenter(new Vector3());
-      camera.position.set(center.x, center.y, center.z + radius * 2.4 + 0.5);
+      // Distancia que realmente hace falta para que el bounding box entre en el
+      // cuadro, calculada con el FOV real (antes usaba un multiplicador fijo que
+      // quedaba demasiado cerca y recortaba pies/cabeza en modelos altos).
+      const persp = camera as PerspectiveCamera;
+      const vFov = (persp.fov * Math.PI) / 180;
+      const hFov = 2 * Math.atan(Math.tan(vFov / 2) * persp.aspect);
+      const halfHeight = size.y / 2;
+      const halfWidth = Math.max(size.x, size.z) / 2; // la silueta más ancha al rotar
+      const distance = Math.max(halfHeight / Math.tan(vFov / 2), halfWidth / Math.tan(hFov / 2)) * 1.2 + 0.2;
+      camera.position.set(center.x, center.y, center.z + distance);
       camera.lookAt(center);
       lastRadius.current = radius;
     }

@@ -1,5 +1,8 @@
 [
+  "models/building-corporate.glb",
+  "models/building-glass.glb",
   "models/building-modern.glb",
+  "models/building-stepped.glb",
   "models/building-tower.glb",
   "models/mailbox.glb",
   "models/player-female.glb",

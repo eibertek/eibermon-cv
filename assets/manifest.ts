@@ -146,7 +146,7 @@ const buildingTypes: { id: string; prompt: string }[] = [
   },
   {
     id: "building-corporate",
-    prompt: `${STYLE_PREFIX}, tall sleek corporate office tower with a flat roof, a small rooftop sign panel, glass and steel facade, light neutral walls, door on the front facing +Z, ${BUILDING_FOOTPRINT}`,
+    prompt: `${STYLE_PREFIX}, tall sleek corporate office tower with a flat roof, a small rooftop antenna, glass and steel facade, light neutral walls, door on the front facing +Z, ${BUILDING_FOOTPRINT}`,
   },
 ];
 

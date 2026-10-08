@@ -67,6 +67,12 @@ ul {
   color: var(--accent-ink);
 }
 
+.btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+  transform: none;
+}
+
 .link {
   appearance: none;
   border: none;
@@ -651,14 +657,16 @@ ul {
 .battle__scene {
   position: relative;
   flex: 1;
+  min-height: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .battle__creature {
-  width: min(40vw, 220px);
-  height: min(40vw, 220px);
+  width: min(40vw, 30vh, 220px);
+  height: min(40vw, 30vh, 220px);
   animation: battle-float 2.4s ease-in-out infinite;
 }
 
@@ -672,6 +680,22 @@ ul {
   filter: drop-shadow(0 10px 14px rgba(43, 42, 38, 0.25));
 }
 
+.battle__zap {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(100deg, transparent 45%, #fff6c2 48%, #ffe066 50%, #fff6c2 52%, transparent 55%);
+  animation: battle-zap 0.35s ease-out forwards;
+}
+
+.battle__sparkle {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.9), transparent 55%);
+  animation: battle-sparkle 0.6s ease-out forwards;
+}
+
 @keyframes battle-float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
@@ -681,6 +705,18 @@ ul {
   0%, 100% { transform: translateX(0) rotate(0deg); }
   25% { transform: translateX(-6px) rotate(-4deg); }
   75% { transform: translateX(6px) rotate(4deg); }
+}
+
+@keyframes battle-zap {
+  0% { opacity: 0; transform: translateX(-30%); }
+  40% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(30%); }
+}
+
+@keyframes battle-sparkle {
+  0% { opacity: 0; transform: scale(0.4); }
+  40% { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.3); }
 }
 
 .battle__hpbar {
@@ -709,6 +745,8 @@ ul {
   flex-direction: column;
   gap: 0.7em;
   max-width: 30rem;
+  max-height: 70vh;
+  overflow-y: auto;
   margin: 0 auto;
   width: 100%;
   border-radius: var(--radius) var(--radius) 0 0;

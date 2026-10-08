@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cv, type Category, type Skill } from "../data/cv";
 import { beginFight, createBattleState, throwBall, throwRay, type BattleState } from "../game/battle";
 import { useGame } from "../game/store";
@@ -20,26 +20,50 @@ export default function BattleModal() {
   return <BattleModalContent key={dialogId} dialogId={dialogId} skill={skill} />;
 }
 
+const THROW_DURATION_MS = 500;
+
 function BattleModalContent({ dialogId, skill }: { dialogId: string; skill: Skill }) {
   const closeDialog = useGame((s) => s.closeDialog);
   const catchSkill = useGame((s) => s.catchSkill);
   const [battle, setBattle] = useState<BattleState>(() => createBattleState(skill.level));
+  const [zapId, setZapId] = useState(0);
+  const [throwing, setThrowing] = useState(false);
+  const throwTimeout = useRef<number | null>(null);
+
+  // Si se huye (Huir o Escape) mientras la Eiberball está en el aire, cancelá el
+  // final del lanzamiento: de lo contrario catchSkill() dispararía igual sobre un
+  // encuentro ya abandonado.
+  useEffect(() => {
+    return () => {
+      if (throwTimeout.current) clearTimeout(throwTimeout.current);
+    };
+  }, []);
 
   const color = skillColor(skill);
   const energyPct = Math.round((battle.energy / battle.maxEnergy) * 100);
 
+  function handleRay() {
+    setBattle((b) => throwRay(b));
+    setZapId((id) => id + 1);
+  }
+
   function handleBall() {
-    setBattle((b) => {
-      const next = throwBall(b);
+    if (throwing || battle.phase !== "catching") return;
+    setThrowing(true);
+    throwTimeout.current = window.setTimeout(() => {
+      const next = throwBall(battle);
+      setBattle(next);
       if (next.phase === "caught") catchSkill(dialogId);
-      return next;
-    });
+      setThrowing(false);
+    }, THROW_DURATION_MS);
   }
 
   return (
     <div className="battle" role="dialog" aria-modal="true" aria-label={`Batalla contra ${skill.name}`}>
       <div className="battle__scene">
-        <CreatureArt category={skill.category} color={color} shaking={battle.phase === "catching"} />
+        <CreatureArt category={skill.category} color={color} shaking={throwing} />
+        {zapId > 0 && <div key={zapId} className="battle__zap" />}
+        {battle.phase === "caught" && <div className="battle__sparkle" aria-hidden="true" />}
         {battle.phase !== "intro" && (
           <div className="battle__hpbar">
             <div className="battle__hpbar-fill" style={{ width: `${energyPct}%` }} />
@@ -66,7 +90,7 @@ function BattleModalContent({ dialogId, skill }: { dialogId: string; skill: Skil
           <>
             <p className="battle__text">{skill.name} se resiste. ¡Atacalo con un rayo!</p>
             <div className="battle__actions">
-              <button className="btn btn--primary" onClick={() => setBattle((b) => throwRay(b))}>
+              <button className="btn btn--primary" onClick={handleRay}>
                 Rayo
               </button>
               <button className="btn" onClick={closeDialog}>
@@ -78,12 +102,14 @@ function BattleModalContent({ dialogId, skill }: { dialogId: string; skill: Skil
 
         {battle.phase === "catching" && (
           <>
-            <p className="battle__text">¡{skill.name} está débil! Es el momento de atraparlo.</p>
+            <p className="battle__text">
+              {throwing ? "¡Lanzaste la Eiberball!" : `¡${skill.name} está débil! Es el momento de atraparlo.`}
+            </p>
             <div className="battle__actions">
-              <button className="btn btn--primary" onClick={handleBall}>
+              <button className="btn btn--primary" onClick={handleBall} disabled={throwing}>
                 ¡Eiberball!
               </button>
-              <button className="btn" onClick={closeDialog}>
+              <button className="btn" onClick={closeDialog} disabled={throwing}>
                 Huir
               </button>
             </div>

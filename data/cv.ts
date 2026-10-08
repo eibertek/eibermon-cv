@@ -76,6 +76,8 @@ export const cv: CV = {
 
   skills: [
     // ── Tecnologías ──────────────────────────────────────────────
+    // El `color` y el `assetPrompt` de cada Eibermon de tech apuntan al color de marca
+    // y a un diseño de criatura propio (ver docs/superpowers/plans para el concepto).
     {
       id: "ts",
       name: "TypeScript",
@@ -84,6 +86,9 @@ export const cv: CV = {
       level: 5,
       years: 5,
       description: "Mi lenguaje principal. Tipado estricto, tipos de dominio y herramientas internas.",
+      color: "#4c8dff",
+      assetPrompt:
+        "low-poly stylized game asset, flat pastel colors, clean silhouette, simple shapes, isometric game view, single object, no background, a small blue dragon-like creature made of sharp geometric crystal facets, faint glowing type-bracket patterns on its scales, serpentine body, friendly curious expression",
     },
     {
       id: "react",
@@ -93,6 +98,9 @@ export const cv: CV = {
       level: 5,
       years: 5,
       description: "Interfaces complejas, manejo de estado y performance.",
+      color: "#61dafb",
+      assetPrompt:
+        "low-poly stylized game asset, flat pastel colors, clean silhouette, simple shapes, isometric game view, single object, no background, a small cyan-blue creature with three thin glowing rings orbiting around its body like electron orbits, round friendly body, big eyes",
     },
     {
       id: "next",
@@ -102,6 +110,9 @@ export const cv: CV = {
       level: 4,
       years: 3,
       description: "App Router, SSR/SSG y APIs con route handlers.",
+      color: "#4f6df5",
+      assetPrompt:
+        "low-poly stylized game asset, flat pastel colors, clean silhouette, simple shapes, isometric game view, single object, no background, a small sleek dark blue winged creature with triangular angular wings, streamlined body, confident pose",
     },
     {
       id: "node",
@@ -111,6 +122,9 @@ export const cv: CV = {
       level: 4,
       years: 5,
       description: "APIs REST, colas de trabajo e integraciones con terceros.",
+      color: "#6fcf57",
+      assetPrompt:
+        "low-poly stylized game asset, flat pastel colors, clean silhouette, simple shapes, isometric game view, single object, no background, a friendly green many-legged bug-like creature with a smooth hexagonal shell on its back, six small legs, big round eyes",
     },
     {
       id: "python",
@@ -120,6 +134,9 @@ export const cv: CV = {
       level: 3,
       years: 3,
       description: "Scripts de automatización, análisis de datos y pequeños servicios.",
+      color: "#4b8bbe",
+      assetPrompt:
+        "low-poly stylized game asset, flat pastel colors, clean silhouette, simple shapes, isometric game view, single object, no background, a two-toned blue and yellow snake-like creature coiled in a figure-eight shape, smooth segmented body, friendly face",
     },
     {
       id: "postgres",
@@ -129,6 +146,9 @@ export const cv: CV = {
       level: 4,
       years: 4,
       description: "Modelado, índices y consultas que no se arrastran.",
+      color: "#5a8fc2",
+      assetPrompt:
+        "low-poly stylized game asset, flat pastel colors, clean silhouette, simple shapes, isometric game view, single object, no background, a small blue elephant-like creature with a cylindrical database-drum shaped body, short trunk, stubby legs, friendly look",
     },
     {
       id: "docker",
@@ -138,6 +158,9 @@ export const cv: CV = {
       level: 3,
       years: 3,
       description: "Entornos reproducibles y despliegues consistentes.",
+      color: "#4da6ff",
+      assetPrompt:
+        "low-poly stylized game asset, flat pastel colors, clean silhouette, simple shapes, isometric game view, single object, no background, a small blue whale-like creature carrying a few stacked cargo container boxes on its back, round friendly body, small fin",
     },
     {
       id: "aws",
@@ -147,6 +170,9 @@ export const cv: CV = {
       level: 3,
       years: 2,
       description: "Servicios gestionados, almacenamiento y despliegues básicos.",
+      color: "#ffa94d",
+      assetPrompt:
+        "low-poly stylized game asset, flat pastel colors, clean silhouette, simple shapes, isometric game view, single object, no background, a small orange cloud-shaped creature with a curved smile-arrow marking underneath like a grin, soft puffy body, tiny stubby arms and legs",
     },
 
     // ── Soft skills ──────────────────────────────────────────────
@@ -157,6 +183,8 @@ export const cv: CV = {
       area: "Personas",
       level: 4,
       description: "Guiar al equipo, destrabar bloqueos y ayudar a crecer a otras personas.",
+      assetPrompt:
+        "low-poly stylized game asset, flat pastel colors, clean silhouette, simple shapes, isometric game view, single object, no background, a small golden lion cub creature with a fluffy mane and a tiny flowing cape, confident friendly pose",
     },
     {
       id: "communication",
@@ -165,6 +193,8 @@ export const cv: CV = {
       area: "Personas",
       level: 4,
       description: "Explicar cosas técnicas a gente no técnica (y al revés).",
+      assetPrompt:
+        "low-poly stylized game asset, flat pastel colors, clean silhouette, simple shapes, isometric game view, single object, no background, a cheerful speech-bubble shaped creature with two small antenna-like speaker ears, round simple body, big smiling mouth",
     },
     {
       id: "teamwork",
@@ -173,6 +203,8 @@ export const cv: CV = {
       area: "Personas",
       level: 5,
       description: "Colaboración, revisiones de código constructivas y ownership compartido.",
+      assetPrompt:
+        "low-poly stylized game asset, flat pastel colors, clean silhouette, simple shapes, isometric game view, single object, no background, a small creature made of three interlocking puzzle-piece segments in slightly different warm shades, round friendly silhouette, big eyes",
     },
     {
       id: "problem-solving",
@@ -181,6 +213,8 @@ export const cv: CV = {
       area: "Mentalidad",
       level: 5,
       description: "Descomponer lo difícil en pasos chicos y avanzar.",
+      assetPrompt:
+        "low-poly stylized game asset, flat pastel colors, clean silhouette, simple shapes, isometric game view, single object, no background, a clever fox-like creature with a glowing lightbulb shape at the tip of its tail, alert pose, bushy tail",
     },
     {
       id: "adaptability",
@@ -189,6 +223,8 @@ export const cv: CV = {
       area: "Mentalidad",
       level: 4,
       description: "Cambiar de stack, de rol o de prioridades sin perder el ritmo.",
+      assetPrompt:
+        "low-poly stylized game asset, flat pastel colors, clean silhouette, simple shapes, isometric game view, single object, no background, a small chameleon-like creature mid color-shift between two pastel tones, curled tail, big rotating eyes",
     },
   ],
 

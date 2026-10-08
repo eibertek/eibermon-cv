@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { cv, type Category, type Skill } from "../data/cv";
+import { cv, type Skill } from "../data/cv";
+import BattleCreature from "./BattleCreature";
 import { beginFight, createBattleState, throwBall, throwRay, type BattleState } from "../game/battle";
 import { useGame } from "../game/store";
 import { interactableById } from "../world/layout";
-import { skillColor } from "../world/theme";
 
 /** Modal de batalla: reemplaza a Dialog para las skills (kind === "skill"). */
 export default function BattleModal() {
@@ -39,7 +39,6 @@ function BattleModalContent({ dialogId, skill }: { dialogId: string; skill: Skil
     };
   }, []);
 
-  const color = skillColor(skill);
   const energyPct = Math.round((battle.energy / battle.maxEnergy) * 100);
 
   function handleRay() {
@@ -61,7 +60,7 @@ function BattleModalContent({ dialogId, skill }: { dialogId: string; skill: Skil
   return (
     <div className="battle" role="dialog" aria-modal="true" aria-label={`Batalla contra ${skill.name}`}>
       <div className="battle__scene">
-        <CreatureArt category={skill.category} color={color} shaking={throwing} />
+        <BattleCreature skillId={skill.id} shaking={throwing} />
         {zapId > 0 && <div key={zapId} className="battle__zap" />}
         {battle.phase === "caught" && <div className="battle__sparkle" aria-hidden="true" />}
         {battle.phase !== "intro" && (
@@ -135,24 +134,6 @@ function BattleModalContent({ dialogId, skill }: { dialogId: string; skill: Skil
           </>
         )}
       </div>
-    </div>
-  );
-}
-
-function CreatureArt({ category, color, shaking }: { category: Category; color: string; shaking: boolean }) {
-  return (
-    <div className={shaking ? "battle__creature battle__creature--shake" : "battle__creature"}>
-      {category === "tech" ? (
-        <svg viewBox="0 0 100 100" className="battle__creature-svg" aria-hidden="true">
-          <polygon points="50,6 90,35 76,90 24,90 10,35" fill={color} />
-          <polygon points="50,6 90,35 50,52 10,35" fill="#ffffff" opacity="0.25" />
-        </svg>
-      ) : (
-        <svg viewBox="0 0 100 100" className="battle__creature-svg" aria-hidden="true">
-          <circle cx="50" cy="55" r="40" fill={color} />
-          <circle cx="36" cy="45" r="10" fill="#ffffff" opacity="0.3" />
-        </svg>
-      )}
     </div>
   );
 }

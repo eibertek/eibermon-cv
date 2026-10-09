@@ -2,6 +2,11 @@
 
 Novedades del juego, de más nueva a más vieja. Formato libre: una línea por feature o fix relevante para quien juega (no un log técnico commit-por-commit).
 
+## 2026-10-09 (4)
+
+- Corregido: el botón ✕ del modal de "qué es esta medalla" no cerraba nada (el modal vivía dentro de un contenedor que bloqueaba los clics). Ahora también se puede cerrar con Escape o Enter, igual que los demás modales del juego.
+- Renombrada la medalla "Full Résumé" a "Full Experience & Personal Info", para no dar a entender que los 5 trabajos recientes son toda la carrera.
+
 ## 2026-10-09 (3)
 
 - **Modal al conseguir una medalla**: aparece automáticamente apenas se cumple (no hace falta ir a mirar el HUD). Las medallas del HUD ahora son botones tocables (no solo tooltip al pasar el mouse) que explican qué es cada una y si ya está desbloqueada. Conseguir la medalla de "todo completo" abre, en cambio, un modal grande agradeciendo por jugar, con el puntaje final, el mejor tiempo y los links de contacto.

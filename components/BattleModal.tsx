@@ -95,6 +95,25 @@ function BattleModalContent({
     }, THROW_DURATION_MS);
   }
 
+  // E, Espacio o Enter disparan la acción principal de la fase actual: Empezar, Rayo o Eiberball
+  // (mismas teclas de "interactuar" que se usan en el resto del juego).
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      const isInteractKey = e.code === "KeyE" || e.code === "Space" || e.code === "Enter";
+      if (!isInteractKey) return;
+      // No secuestrar Espacio/Enter si el foco ya está en un botón/link: su propio onClick ya responde a esto.
+      const el = e.target as HTMLElement | null;
+      if (e.code !== "KeyE" && el && (el.tagName === "BUTTON" || el.tagName === "A")) return;
+      e.preventDefault();
+      if (battle.phase === "intro") handleBegin();
+      else if (battle.phase === "fighting") handleRay();
+      else if (battle.phase === "catching") handleBall();
+      else if (battle.phase === "caught") closeDialog();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [battle, throwing]);
+
   const skillName = t(skill.name, locale);
 
   return (

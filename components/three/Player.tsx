@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import type { Group } from "three";
-import { readAxes } from "../../game/input";
+import { input, readAxes } from "../../game/input";
 import { dampAngle } from "../../game/math";
 import { playerState } from "../../game/playerState";
 import { useGame } from "../../game/store";
@@ -11,6 +11,7 @@ import { Asset } from "./Asset";
 import { camState } from "./IsoCamera";
 
 const SPEED = 5.5;
+const RUN_MULTIPLIER = 1.7;
 const RADIUS = 0.4;
 
 export default function Player() {
@@ -49,10 +50,11 @@ export default function Player() {
       const rightZ = -Math.sin(yaw);
       const moveX = forwardX * iy + rightX * ix;
       const moveZ = forwardZ * iy + rightZ * ix;
+      const speed = SPEED * (input.running ? RUN_MULTIPLIER : 1);
 
       const [nx, nz] = resolveCollisions(
-        playerState.x + moveX * SPEED * dt,
-        playerState.z + moveZ * SPEED * dt,
+        playerState.x + moveX * speed * dt,
+        playerState.z + moveZ * speed * dt,
         RADIUS,
         world.obstacles,
       );

@@ -11,7 +11,7 @@ export function t(text: Text, locale: Locale): string {
 export const strings = {
   en: {
     gameTitle: "Playable CV",
-    helpMove: "WASD or arrow keys to walk",
+    helpMove: "WASD or arrow keys to walk (hold Shift to run)",
     helpInteract: "E or Space to interact",
     helpCamera: "Q and R to rotate the camera",
     helpTouch: "Use the joystick to walk and the button to interact",
@@ -83,7 +83,7 @@ export const strings = {
   },
   es: {
     gameTitle: "CV jugable",
-    helpMove: "WASD o flechas para caminar",
+    helpMove: "WASD o flechas para caminar (mantené Shift para correr)",
     helpInteract: "E o Espacio para interactuar",
     helpCamera: "Q y R para rotar la cámara",
     helpTouch: "Usá el joystick para caminar y el botón para interactuar",

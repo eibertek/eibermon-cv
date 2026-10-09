@@ -8,6 +8,8 @@ export const input = {
   right: false,
   joyX: 0,
   joyY: 0,
+  /** Shift mantenido: correr. */
+  running: false,
 };
 
 /** Ejes combinados, normalizados a círculo unitario. x: derecha (+), y: adelante (+). */
@@ -29,4 +31,5 @@ export function resetInput(): void {
   input.right = false;
   input.joyX = 0;
   input.joyY = 0;
+  input.running = false;
 }

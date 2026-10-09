@@ -61,6 +61,11 @@ export function useKeyboard(): void {
         return;
       }
 
+      if (e.code === "ShiftLeft" || e.code === "ShiftRight") {
+        input.running = true;
+        return;
+      }
+
       if (isInteractKey(e.code)) {
         // No secuestrar Espacio/Enter si el foco está en un botón o link
         const el = e.target as HTMLElement | null;
@@ -77,6 +82,7 @@ export function useKeyboard(): void {
     const onKeyUp = (e: KeyboardEvent) => {
       const dir = MOVE_KEYS[e.code];
       if (dir) input[dir] = false;
+      if (e.code === "ShiftLeft" || e.code === "ShiftRight") input.running = false;
     };
 
     const onBlur = () => resetInput();

@@ -2,6 +2,10 @@
 
 Novedades del juego, de más nueva a más vieja. Formato libre: una línea por feature o fix relevante para quien juega (no un log técnico commit-por-commit).
 
+## 2026-10-09 (6)
+
+- La pantalla de batalla (Empezar → Rayo → Eiberball) ahora también responde a E, Espacio o Enter, no solo al click — antes solo funcionaba con el mouse.
+
 ## 2026-10-09 (5)
 
 - **Mantené Shift para correr** (por ahora, solo en teclado): la velocidad sube 1.7x mientras lo tenés apretado.

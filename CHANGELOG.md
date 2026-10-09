@@ -2,6 +2,10 @@
 
 Novedades del juego, de más nueva a más vieja. Formato libre: una línea por feature o fix relevante para quien juega (no un log técnico commit-por-commit).
 
+## 2026-10-09 (2)
+
+- **El recorrido ahora arranca en el buzón de contacto**: el personaje aparece al lado del buzón, así ve primero los links de contacto, y el mensaje del buzón pasó de ser una despedida a una bienvenida que explica qué hacer (atrapar Eibermon para ver las skills, entrar a los edificios de la avenida para ver la experiencia). Reiniciar el progreso también te vuelve a teletransportar ahí.
+
 ## 2026-10-09
 
 - **Medallas, puntaje y reinicio**: tres medallas en el HUD por completar categorías (todos los Eibermon atrapados, toda la experiencia laboral + archivo + buzón, o absolutamente todo). Las batallas ahora puntúan según el timing del ataque (rayo perfecto/bueno/ok), terminar el recorrido completo suma un bonus por velocidad y guarda el mejor tiempo, y hay un botón de reinicio que borra el progreso (conservando el mejor tiempo).

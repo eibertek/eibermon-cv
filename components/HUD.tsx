@@ -7,7 +7,16 @@ import { useGame } from "../game/store";
 import { world } from "../world/layout";
 import Minimap from "./Minimap";
 
-/** Interfaz permanente del juego: progreso, acciones y mapa. */
+const SKILL_IDS = world.skills.map((s) => s.interactId);
+const EXPERIENCE_IDS = [...world.jobs.map((j) => j.interactId), world.archive.interactId, world.contact.interactId];
+
+function formatTime(seconds: number): string {
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+/** Interfaz permanente del juego: progreso, badges, puntaje, acciones y mapa. */
 export default function HUD() {
   const started = useGame((s) => s.started);
   const classicOpen = useGame((s) => s.classicOpen);
@@ -15,17 +24,28 @@ export default function HUD() {
   const discovered = useGame((s) => s.discovered);
   const nearbyId = useGame((s) => s.nearbyId);
   const locale = useGame((s) => s.locale);
+  const score = useGame((s) => s.score);
+  const bestTimeSeconds = useGame((s) => s.bestTimeSeconds);
   const rotateCam = useGame((s) => s.rotateCam);
   const requestTeleport = useGame((s) => s.requestTeleport);
   const setClassic = useGame((s) => s.setClassic);
   const interact = useGame((s) => s.interact);
   const setLocale = useGame((s) => s.setLocale);
+  const resetProgress = useGame((s) => s.resetProgress);
   const [gotoOpen, setGotoOpen] = useState(false);
 
   if (!started || classicOpen) return null;
 
   const total = world.interactables.length;
   const nearby = nearbyId ? world.interactables.find((it) => it.id === nearbyId) : null;
+
+  const eibermonMaster = SKILL_IDS.every((id) => discovered.includes(id));
+  const experienceComplete = EXPERIENCE_IDS.every((id) => discovered.includes(id));
+  const completionist = discovered.length >= total;
+
+  function handleReset() {
+    if (window.confirm(ui("resetConfirm", locale))) resetProgress();
+  }
 
   return (
     <div className="hud">
@@ -34,6 +54,30 @@ export default function HUD() {
         <span className="hud__progress">
           {discovered.length} / {total} {ui("discovered", locale)}
         </span>
+        <span className="hud__score">
+          {ui("score", locale)}: {score}
+          {bestTimeSeconds !== null && ` · ${ui("bestTime", locale)}: ${formatTime(bestTimeSeconds)}`}
+        </span>
+        <div className="hud__badges">
+          <span
+            className={eibermonMaster ? "hud__badge hud__badge--on" : "hud__badge"}
+            title={`${ui("badgeEibermon", locale)} — ${ui("badgeEibermonDesc", locale)}`}
+          >
+            ⚡
+          </span>
+          <span
+            className={experienceComplete ? "hud__badge hud__badge--on" : "hud__badge"}
+            title={`${ui("badgeExperience", locale)} — ${ui("badgeExperienceDesc", locale)}`}
+          >
+            🏢
+          </span>
+          <span
+            className={completionist ? "hud__badge hud__badge--on" : "hud__badge"}
+            title={`${ui("badgeCompletionist", locale)} — ${ui("badgeCompletionistDesc", locale)}`}
+          >
+            🏆
+          </span>
+        </div>
       </div>
 
       <div className="hud__actions">
@@ -80,6 +124,10 @@ export default function HUD() {
 
         <button className="btn" onClick={() => setLocale(locale === "en" ? "es" : "en")}>
           {ui("languageToggle", locale)}
+        </button>
+
+        <button className="btn hud__reset" onClick={handleReset}>
+          {ui("resetButton", locale)}
         </button>
       </div>
 

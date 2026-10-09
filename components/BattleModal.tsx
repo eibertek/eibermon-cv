@@ -4,7 +4,15 @@ import { useEffect, useRef, useState } from "react";
 import { cv, type Skill } from "../data/cv";
 import { t, ui, type Locale } from "../data/i18n";
 import BattleCreature from "./BattleCreature";
-import { beginFight, createBattleState, throwBall, throwRay, type BattleState } from "../game/battle";
+import {
+  beginFight,
+  createBattleState,
+  throwBall,
+  throwRay,
+  timingTierAt,
+  type BattleState,
+  type TimingTier,
+} from "../game/battle";
 import { useGame } from "../game/store";
 import { interactableById } from "../world/layout";
 
@@ -24,6 +32,8 @@ export default function BattleModal() {
 
 const THROW_DURATION_MS = 500;
 
+const TIER_LABEL_KEY = { perfect: "tierPerfect", good: "tierGood", ok: "tierOk" } as const;
+
 function BattleModalContent({
   dialogId,
   skill,
@@ -35,10 +45,16 @@ function BattleModalContent({
 }) {
   const closeDialog = useGame((s) => s.closeDialog);
   const catchSkill = useGame((s) => s.catchSkill);
+  const addScore = useGame((s) => s.addScore);
   const [battle, setBattle] = useState<BattleState>(() => createBattleState(skill.level));
   const [zapId, setZapId] = useState(0);
   const [throwing, setThrowing] = useState(false);
   const throwTimeout = useRef<number | null>(null);
+  // Arranca a contar en cuanto se toca ¡Empezar! (ver handleBegin), para que coincida
+  // con el momento en que la barra de timing empieza a animarse en CSS.
+  const battleStartRef = useRef(0);
+  const battlePointsRef = useRef(0);
+  const [hit, setHit] = useState<{ id: number; tier: TimingTier; points: number } | null>(null);
 
   // Si se huye (Huir o Escape) mientras la Eiberball está en el aire, cancelá el
   // final del lanzamiento: de lo contrario catchSkill() dispararía igual sobre un
@@ -51,7 +67,16 @@ function BattleModalContent({
 
   const energyPct = Math.round((battle.energy / battle.maxEnergy) * 100);
 
+  function handleBegin() {
+    battleStartRef.current = performance.now();
+    setBattle((b) => beginFight(b));
+  }
+
   function handleRay() {
+    const elapsedSeconds = (performance.now() - battleStartRef.current) / 1000;
+    const { tier, points } = timingTierAt(elapsedSeconds);
+    battlePointsRef.current += points;
+    setHit({ id: Date.now(), tier, points });
     setBattle((b) => throwRay(b));
     setZapId((id) => id + 1);
   }
@@ -62,7 +87,10 @@ function BattleModalContent({
     throwTimeout.current = window.setTimeout(() => {
       const next = throwBall(battle);
       setBattle(next);
-      if (next.phase === "caught") catchSkill(dialogId);
+      if (next.phase === "caught") {
+        catchSkill(dialogId);
+        addScore(battlePointsRef.current);
+      }
       setThrowing(false);
     }, THROW_DURATION_MS);
   }
@@ -79,6 +107,11 @@ function BattleModalContent({
       <div className="battle__scene">
         <BattleCreature skillId={skill.id} shaking={throwing} />
         {zapId > 0 && <div key={zapId} className="battle__zap" />}
+        {hit && (
+          <div key={hit.id} className={`battle__hit battle__hit--${hit.tier}`}>
+            +{hit.points} {ui(TIER_LABEL_KEY[hit.tier], locale)}
+          </div>
+        )}
         {battle.phase === "caught" && <div className="battle__sparkle" aria-hidden="true" />}
         {battle.phase !== "intro" && (
           <div className="battle__hpbar">
@@ -94,7 +127,7 @@ function BattleModalContent({
               {ui("wildEibermonAppeared", locale)} {skillName}.
             </p>
             <div className="battle__actions">
-              <button className="btn btn--primary" onClick={() => setBattle((b) => beginFight(b))}>
+              <button className="btn btn--primary" onClick={handleBegin}>
                 {ui("start", locale)}!
               </button>
               <button className="btn" onClick={closeDialog}>
@@ -109,6 +142,10 @@ function BattleModalContent({
             <p className="battle__text">
               {skillName} {ui("resists", locale)}
             </p>
+            <div className="battle__timing-track">
+              <div className="battle__timing-zone" />
+              <div className="battle__timing-marker" />
+            </div>
             <div className="battle__actions">
               <button className="btn btn--primary" onClick={handleRay}>
                 {ui("ray", locale)}

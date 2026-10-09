@@ -11,3 +11,5 @@ next-env.d.ts
 # Descargas crudas de Meshy (pesadas). Guardá un backup aparte (Drive, Git LFS, etc.).
 # Lo que usa el juego son los modelos ya optimizados en public/models/.
 models-src/
+.vercel
+.env*

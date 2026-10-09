@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { beginFight, createBattleState, throwBall, throwRay } from "../game/battle";
+import { beginFight, createBattleState, throwBall, throwRay, timingTierAt } from "../game/battle";
 
 test("createBattleState starts in intro with energy equal to the skill level", () => {
   const state = createBattleState(3);
@@ -43,4 +43,23 @@ test("throwBall only works from catching, and moves to caught", () => {
   state = throwRay(state); // now catching
   state = throwBall(state);
   assert.equal(state.phase, "caught");
+});
+
+test("timingTierAt is 'ok' right at the start of the cycle", () => {
+  assert.equal(timingTierAt(0).tier, "ok");
+});
+
+test("timingTierAt is 'perfect' at the peak (middle of the 2s cycle)", () => {
+  const { tier, points } = timingTierAt(1);
+  assert.equal(tier, "perfect");
+  assert.equal(points, 50);
+});
+
+test("timingTierAt is 'good' partway up the ramp", () => {
+  assert.equal(timingTierAt(0.7).tier, "good");
+});
+
+test("timingTierAt wraps around for elapsed times beyond one cycle", () => {
+  assert.equal(timingTierAt(2).tier, timingTierAt(0).tier);
+  assert.equal(timingTierAt(3).tier, timingTierAt(1).tier);
 });

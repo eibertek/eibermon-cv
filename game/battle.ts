@@ -26,3 +26,25 @@ export function throwBall(state: BattleState): BattleState {
   if (state.phase !== "catching") return state;
   return { ...state, phase: "caught" };
 }
+
+export type TimingTier = "perfect" | "good" | "ok";
+
+/**
+ * Puntaje por precisión: un marcador recorre una barra (0% → 100% → 0%) cada
+ * `TIMING_CYCLE_SECONDS`, y clickear Rayo cerca de la punta (100%) da más puntos.
+ * Pura y determinística (recibe el tiempo transcurrido, no lee el reloj) para
+ * poder testearla sin simular `performance.now()`.
+ */
+export const TIMING_CYCLE_SECONDS = 2;
+
+export function timingTierAt(elapsedSeconds: number): { tier: TimingTier; points: number } {
+  const cycle = TIMING_CYCLE_SECONDS;
+  const t = ((elapsedSeconds % cycle) + cycle) % cycle; // siempre positivo
+  const tNorm = t / cycle;
+  // 0 -> 1 en la primera mitad del ciclo, 1 -> 0 en la segunda (misma onda
+  // triangular que dibuja el marcador animado en CSS).
+  const position = tNorm < 0.5 ? tNorm * 2 : (1 - tNorm) * 2;
+  if (position >= 0.85) return { tier: "perfect", points: 50 };
+  if (position >= 0.6) return { tier: "good", points: 20 };
+  return { tier: "ok", points: 5 };
+}

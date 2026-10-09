@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { newlyEarnedBadges, type BadgeId } from "./badges";
 import type { Locale } from "../data/i18n";
 import { interactableById, world } from "../world/layout";
 
@@ -28,6 +29,10 @@ type GameState = {
   /** Date.now() de cuando arrancó el recorrido actual; null si todavía no empezó
    *  o si ya se completó. No se persiste: solo cuenta el tiempo de esta sesión. */
   runStartedAt: number | null;
+  /** Medallas ya notificadas al menos una vez (se guardan en localStorage, para no repetir el aviso). */
+  seenBadges: BadgeId[];
+  /** Medallas recién ganadas, pendientes de mostrar su modal (no se persiste). */
+  badgeQueue: BadgeId[];
 
   start: () => void;
   setNearby: (id: string | null) => void;
@@ -42,6 +47,7 @@ type GameState = {
   catchSkill: (id: string) => void;
   setLocale: (locale: Locale) => void;
   addScore: (points: number) => void;
+  dismissBadge: () => void;
 };
 
 /** Si ya se descubrió todo y el recorrido seguía "abierto", lo cierra y liquida el bonus de tiempo. */
@@ -74,6 +80,8 @@ export const useGame = create<GameState>()(
       score: 0,
       bestTimeSeconds: null,
       runStartedAt: null,
+      seenBadges: [],
+      badgeQueue: [],
 
       start: () =>
         set((s) => ({ started: true, runStartedAt: s.runStartedAt ?? Date.now() })),
@@ -84,11 +92,16 @@ export const useGame = create<GameState>()(
         const kind = interactableById.get(nearbyId)!.kind;
         const nextDiscovered =
           kind !== "skill" && !discovered.includes(nearbyId) ? [...discovered, nearbyId] : discovered;
-        set((s) => ({
-          dialogId: nearbyId,
-          discovered: nextDiscovered,
-          ...finishRunIfComplete({ ...s, discovered: nextDiscovered }),
-        }));
+        set((s) => {
+          const newBadges = newlyEarnedBadges(nextDiscovered, s.seenBadges);
+          return {
+            dialogId: nearbyId,
+            discovered: nextDiscovered,
+            seenBadges: newBadges.length ? [...s.seenBadges, ...newBadges] : s.seenBadges,
+            badgeQueue: newBadges.length ? [...s.badgeQueue, ...newBadges] : s.badgeQueue,
+            ...finishRunIfComplete({ ...s, discovered: nextDiscovered }),
+          };
+        });
       },
       closeDialog: () => set({ dialogId: null }),
       setClassic: (open) => set({ classicOpen: open }),
@@ -100,26 +113,36 @@ export const useGame = create<GameState>()(
           discovered: [],
           score: 0,
           runStartedAt: null,
+          seenBadges: [],
+          badgeQueue: [],
           teleport: { x: world.startSpawn[0], z: world.startSpawn[1] },
         }),
       setCharacter: (character) => set({ character }),
       catchSkill: (id) =>
         set((s) => {
           const nextDiscovered = s.discovered.includes(id) ? s.discovered : [...s.discovered, id];
-          return { discovered: nextDiscovered, ...finishRunIfComplete({ ...s, discovered: nextDiscovered }) };
+          const newBadges = newlyEarnedBadges(nextDiscovered, s.seenBadges);
+          return {
+            discovered: nextDiscovered,
+            seenBadges: newBadges.length ? [...s.seenBadges, ...newBadges] : s.seenBadges,
+            badgeQueue: newBadges.length ? [...s.badgeQueue, ...newBadges] : s.badgeQueue,
+            ...finishRunIfComplete({ ...s, discovered: nextDiscovered }),
+          };
         }),
       setLocale: (locale) => set({ locale }),
       addScore: (points) => set((s) => ({ score: s.score + points })),
+      dismissBadge: () => set((s) => ({ badgeQueue: s.badgeQueue.slice(1) })),
     }),
     {
       name: "cv-city-progress",
-      version: 3,
+      version: 4,
       partialize: (s) => ({
         discovered: s.discovered,
         character: s.character,
         locale: s.locale,
         score: s.score,
         bestTimeSeconds: s.bestTimeSeconds,
+        seenBadges: s.seenBadges,
       }),
     },
   ),

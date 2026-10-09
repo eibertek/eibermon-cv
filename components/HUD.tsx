@@ -3,12 +3,10 @@
 import { useState } from "react";
 import { cv } from "../data/cv";
 import { t, ui } from "../data/i18n";
+import { BADGE_DESC_KEY, BADGE_ICON, BADGE_IDS, BADGE_LABEL_KEY, isBadgeEarned, type BadgeId } from "../game/badges";
 import { useGame } from "../game/store";
 import { world } from "../world/layout";
 import Minimap from "./Minimap";
-
-const SKILL_IDS = world.skills.map((s) => s.interactId);
-const EXPERIENCE_IDS = [...world.jobs.map((j) => j.interactId), world.archive.interactId, world.contact.interactId];
 
 function formatTime(seconds: number): string {
   const m = Math.floor(seconds / 60);
@@ -33,15 +31,12 @@ export default function HUD() {
   const setLocale = useGame((s) => s.setLocale);
   const resetProgress = useGame((s) => s.resetProgress);
   const [gotoOpen, setGotoOpen] = useState(false);
+  const [infoBadge, setInfoBadge] = useState<BadgeId | null>(null);
 
   if (!started || classicOpen) return null;
 
   const total = world.interactables.length;
   const nearby = nearbyId ? world.interactables.find((it) => it.id === nearbyId) : null;
-
-  const eibermonMaster = SKILL_IDS.every((id) => discovered.includes(id));
-  const experienceComplete = EXPERIENCE_IDS.every((id) => discovered.includes(id));
-  const completionist = discovered.length >= total;
 
   function handleReset() {
     if (window.confirm(ui("resetConfirm", locale))) resetProgress();
@@ -59,24 +54,17 @@ export default function HUD() {
           {bestTimeSeconds !== null && ` · ${ui("bestTime", locale)}: ${formatTime(bestTimeSeconds)}`}
         </span>
         <div className="hud__badges">
-          <span
-            className={eibermonMaster ? "hud__badge hud__badge--on" : "hud__badge"}
-            title={`${ui("badgeEibermon", locale)} — ${ui("badgeEibermonDesc", locale)}`}
-          >
-            ⚡
-          </span>
-          <span
-            className={experienceComplete ? "hud__badge hud__badge--on" : "hud__badge"}
-            title={`${ui("badgeExperience", locale)} — ${ui("badgeExperienceDesc", locale)}`}
-          >
-            🏢
-          </span>
-          <span
-            className={completionist ? "hud__badge hud__badge--on" : "hud__badge"}
-            title={`${ui("badgeCompletionist", locale)} — ${ui("badgeCompletionistDesc", locale)}`}
-          >
-            🏆
-          </span>
+          {BADGE_IDS.map((id) => (
+            <button
+              key={id}
+              type="button"
+              className={isBadgeEarned(id, discovered) ? "hud__badge hud__badge--on" : "hud__badge"}
+              onClick={() => setInfoBadge(id)}
+              aria-label={`${ui(BADGE_LABEL_KEY[id], locale)} — ${ui(BADGE_DESC_KEY[id], locale)}`}
+            >
+              {BADGE_ICON[id]}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -139,6 +127,33 @@ export default function HUD() {
       )}
 
       <Minimap />
+
+      {infoBadge && (
+        <div className="dialog badge-modal" role="dialog" aria-modal="true" onClick={() => setInfoBadge(null)}>
+          <div className="dialog__card" onClick={(e) => e.stopPropagation()}>
+            <button
+              className="dialog__close"
+              onClick={() => setInfoBadge(null)}
+              aria-label={ui("close", locale)}
+            >
+              ✕
+            </button>
+            <span
+              className={
+                isBadgeEarned(infoBadge, discovered) ? "badge-modal__icon" : "badge-modal__icon badge-modal__icon--locked"
+              }
+              aria-hidden="true"
+            >
+              {BADGE_ICON[infoBadge]}
+            </span>
+            <p className="dialog__eyebrow">
+              {isBadgeEarned(infoBadge, discovered) ? ui("badgeEarnedLabel", locale) : ui("badgeLocked", locale)}
+            </p>
+            <h2>{ui(BADGE_LABEL_KEY[infoBadge], locale)}</h2>
+            <p>{ui(BADGE_DESC_KEY[infoBadge], locale)}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

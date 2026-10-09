@@ -73,6 +73,13 @@ export const strings = {
     tierPerfect: "Perfect!",
     tierGood: "Good",
     tierOk: "OK",
+    badgeEarnedEyebrow: "New badge!",
+    badgeEarnedLabel: "Unlocked",
+    badgeLocked: "Not unlocked yet",
+    badgeModalClose: "Nice!",
+    thanksTitle: "Thanks for playing!",
+    thanksMessage: "You've seen everything the city has to offer. If anything caught your eye, let's talk:",
+    finalScore: "Final score",
   },
   es: {
     gameTitle: "CV jugable",
@@ -138,6 +145,13 @@ export const strings = {
     tierPerfect: "¡Perfecto!",
     tierGood: "Bien",
     tierOk: "OK",
+    badgeEarnedEyebrow: "¡Nueva medalla!",
+    badgeEarnedLabel: "Desbloqueada",
+    badgeLocked: "Todavía no desbloqueada",
+    badgeModalClose: "¡Genial!",
+    thanksTitle: "¡Gracias por jugar!",
+    thanksMessage: "Ya viste todo lo que tiene la ciudad. Si algo te interesó, hablemos:",
+    finalScore: "Puntaje final",
   },
 } satisfies Record<Locale, Record<string, string>>;
 

@@ -3,6 +3,7 @@
 import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { useKeyboard } from "../game/useKeyboard";
+import BadgeModal from "./BadgeModal";
 import BattleModal from "./BattleModal";
 import ClassicOverlay from "./ClassicOverlay";
 import Dialog from "./Dialog";
@@ -27,6 +28,7 @@ export default function Game() {
       <Joystick />
       <Dialog />
       <BattleModal />
+      <BadgeModal />
       <StartScreen />
       <ClassicOverlay />
     </div>

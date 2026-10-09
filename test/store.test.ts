@@ -17,6 +17,8 @@ function resetStore() {
     score: 0,
     bestTimeSeconds: null,
     runStartedAt: null,
+    seenBadges: [],
+    badgeQueue: [],
   });
 }
 
@@ -100,13 +102,59 @@ test("completing the run again (already closed) does not award a second bonus", 
   assert.equal(state.bestTimeSeconds, 10);
 });
 
-test("resetProgress() clears discovered, score, and the run clock, but keeps the best time", () => {
+test("resetProgress() clears discovered, score, badges, and the run clock, but keeps the best time", () => {
   resetStore();
-  useGame.setState({ discovered: ["skill:ts"], score: 500, bestTimeSeconds: 42, runStartedAt: Date.now() });
+  useGame.setState({
+    discovered: ["skill:ts"],
+    score: 500,
+    bestTimeSeconds: 42,
+    runStartedAt: Date.now(),
+    seenBadges: ["eibermon"],
+    badgeQueue: ["eibermon"],
+  });
   useGame.getState().resetProgress();
   const state = useGame.getState();
   assert.deepEqual(state.discovered, []);
   assert.equal(state.score, 0);
   assert.equal(state.runStartedAt, null);
   assert.equal(state.bestTimeSeconds, 42);
+  assert.deepEqual(state.seenBadges, []);
+  assert.deepEqual(state.badgeQueue, []);
+});
+
+test("catching the last skill queues the eibermon badge exactly once", () => {
+  resetStore();
+  const skillIds = [...interactableById.keys()].filter((id) => id.startsWith("skill:"));
+  useGame.setState({ discovered: skillIds.slice(1) });
+
+  useGame.getState().catchSkill(skillIds[0]);
+  assert.deepEqual(useGame.getState().badgeQueue, ["eibermon"]);
+  assert.deepEqual(useGame.getState().seenBadges, ["eibermon"]);
+
+  // Ya atrapado: no debería volver a encolarse.
+  useGame.getState().catchSkill(skillIds[0]);
+  assert.deepEqual(useGame.getState().badgeQueue, ["eibermon"]);
+});
+
+test("interact() on the last remaining interactable can queue several badges at once", () => {
+  resetStore();
+  const allIds = [...interactableById.keys()];
+  // El archivo (no una skill): interact() lo descubre al toque, a diferencia de una skill.
+  const last = "archive";
+  const rest = allIds.filter((id) => id !== last);
+  useGame.setState({ discovered: rest });
+  useGame.getState().setNearby(last);
+
+  useGame.getState().interact();
+
+  const state = useGame.getState();
+  assert.ok(state.badgeQueue.includes("completionist"));
+  assert.deepEqual(state.badgeQueue, state.seenBadges);
+});
+
+test("dismissBadge() pops the front of the queue", () => {
+  resetStore();
+  useGame.setState({ badgeQueue: ["eibermon", "experience"] });
+  useGame.getState().dismissBadge();
+  assert.deepEqual(useGame.getState().badgeQueue, ["experience"]);
 });

@@ -490,7 +490,10 @@ ul {
   opacity: 0.25;
   filter: grayscale(1);
   transition: opacity 0.2s ease, filter 0.2s ease;
-  cursor: default;
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
 }
 
 .hud__badge--on {
@@ -696,6 +699,37 @@ ul {
 .dialog__ok {
   display: block;
   margin: 1.4em auto 0;
+}
+
+/* ───────────────────────── Modal de medallas ───────────────────────── */
+
+.badge-modal .dialog__card {
+  text-align: center;
+}
+
+.badge-modal__icon {
+  display: block;
+  font-size: 3rem;
+  line-height: 1;
+  margin-bottom: 0.4em;
+}
+
+.badge-modal__icon--locked {
+  filter: grayscale(1);
+  opacity: 0.35;
+}
+
+.badge-modal__card--thanks {
+  max-width: 32rem;
+}
+
+.badge-modal__score {
+  font-weight: 600;
+  margin: 0.8em 0;
+}
+
+.badge-modal .dialog__links {
+  align-items: center;
 }
 
 /* ───────────────────────── Joystick táctil ───────────────────────── */

@@ -2,6 +2,10 @@
 
 Novedades del juego, de más nueva a más vieja. Formato libre: una línea por feature o fix relevante para quien juega (no un log técnico commit-por-commit).
 
+## 2026-10-09 (3)
+
+- **Modal al conseguir una medalla**: aparece automáticamente apenas se cumple (no hace falta ir a mirar el HUD). Las medallas del HUD ahora son botones tocables (no solo tooltip al pasar el mouse) que explican qué es cada una y si ya está desbloqueada. Conseguir la medalla de "todo completo" abre, en cambio, un modal grande agradeciendo por jugar, con el puntaje final, el mejor tiempo y los links de contacto.
+
 ## 2026-10-09 (2)
 
 - **El recorrido ahora arranca en el buzón de contacto**: el personaje aparece al lado del buzón, así ve primero los links de contacto, y el mensaje del buzón pasó de ser una despedida a una bienvenida que explica qué hacer (atrapar Eibermon para ver las skills, entrar a los edificios de la avenida para ver la experiencia). Reiniciar el progreso también te vuelve a teletransportar ahí.

@@ -26,11 +26,25 @@ export function useKeyboard(): void {
       const s = useGame.getState();
 
       if (e.code === "Escape") {
-        if (s.dialogId) s.closeDialog();
+        if (s.infoBadge) s.closeBadgeInfo();
+        else if (s.badgeQueue.length > 0) s.dismissBadge();
+        else if (s.dialogId) s.closeDialog();
         else if (s.classicOpen) s.setClassic(false);
         return;
       }
       if (s.classicOpen || !s.started) return;
+
+      if (s.infoBadge || s.badgeQueue.length > 0) {
+        if (isInteractKey(e.code)) {
+          // No secuestrar Espacio/Enter si el foco está en un botón del modal (ya lo cierra solo)
+          const el = e.target as HTMLElement | null;
+          if (e.code !== "KeyE" && el && (el.tagName === "BUTTON" || el.tagName === "A")) return;
+          e.preventDefault();
+          if (s.infoBadge) s.closeBadgeInfo();
+          else s.dismissBadge();
+        }
+        return;
+      }
 
       if (s.dialogId) {
         if (isInteractKey(e.code) && interactableById.get(s.dialogId)?.kind !== "skill") {

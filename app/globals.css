@@ -703,6 +703,11 @@ ul {
 
 /* ───────────────────────── Modal de medallas ───────────────────────── */
 
+.badge-modal {
+  /* El de HUD.tsx cuelga dentro de .hud, que tiene pointer-events: none. */
+  pointer-events: auto;
+}
+
 .badge-modal .dialog__card {
   text-align: center;
 }

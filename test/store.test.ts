@@ -19,6 +19,7 @@ function resetStore() {
     runStartedAt: null,
     seenBadges: [],
     badgeQueue: [],
+    infoBadge: null,
   });
 }
 
@@ -157,4 +158,12 @@ test("dismissBadge() pops the front of the queue", () => {
   useGame.setState({ badgeQueue: ["eibermon", "experience"] });
   useGame.getState().dismissBadge();
   assert.deepEqual(useGame.getState().badgeQueue, ["experience"]);
+});
+
+test("openBadgeInfo()/closeBadgeInfo() toggle the on-demand badge viewer", () => {
+  resetStore();
+  useGame.getState().openBadgeInfo("completionist");
+  assert.equal(useGame.getState().infoBadge, "completionist");
+  useGame.getState().closeBadgeInfo();
+  assert.equal(useGame.getState().infoBadge, null);
 });

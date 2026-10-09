@@ -33,6 +33,8 @@ type GameState = {
   seenBadges: BadgeId[];
   /** Medallas recién ganadas, pendientes de mostrar su modal (no se persiste). */
   badgeQueue: BadgeId[];
+  /** Medalla que se está consultando a mano desde el HUD (no se persiste). */
+  infoBadge: BadgeId | null;
 
   start: () => void;
   setNearby: (id: string | null) => void;
@@ -48,6 +50,8 @@ type GameState = {
   setLocale: (locale: Locale) => void;
   addScore: (points: number) => void;
   dismissBadge: () => void;
+  openBadgeInfo: (id: BadgeId) => void;
+  closeBadgeInfo: () => void;
 };
 
 /** Si ya se descubrió todo y el recorrido seguía "abierto", lo cierra y liquida el bonus de tiempo. */
@@ -82,6 +86,7 @@ export const useGame = create<GameState>()(
       runStartedAt: null,
       seenBadges: [],
       badgeQueue: [],
+      infoBadge: null,
 
       start: () =>
         set((s) => ({ started: true, runStartedAt: s.runStartedAt ?? Date.now() })),
@@ -132,6 +137,8 @@ export const useGame = create<GameState>()(
       setLocale: (locale) => set({ locale }),
       addScore: (points) => set((s) => ({ score: s.score + points })),
       dismissBadge: () => set((s) => ({ badgeQueue: s.badgeQueue.slice(1) })),
+      openBadgeInfo: (id) => set({ infoBadge: id }),
+      closeBadgeInfo: () => set({ infoBadge: null }),
     }),
     {
       name: "cv-city-progress",

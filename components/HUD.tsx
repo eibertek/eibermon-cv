@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { cv } from "../data/cv";
 import { t, ui } from "../data/i18n";
-import { BADGE_DESC_KEY, BADGE_ICON, BADGE_IDS, BADGE_LABEL_KEY, isBadgeEarned, type BadgeId } from "../game/badges";
+import { BADGE_DESC_KEY, BADGE_ICON, BADGE_IDS, BADGE_LABEL_KEY, isBadgeEarned } from "../game/badges";
 import { useGame } from "../game/store";
 import { world } from "../world/layout";
 import Minimap from "./Minimap";
@@ -30,8 +30,10 @@ export default function HUD() {
   const interact = useGame((s) => s.interact);
   const setLocale = useGame((s) => s.setLocale);
   const resetProgress = useGame((s) => s.resetProgress);
+  const infoBadge = useGame((s) => s.infoBadge);
+  const openBadgeInfo = useGame((s) => s.openBadgeInfo);
+  const closeBadgeInfo = useGame((s) => s.closeBadgeInfo);
   const [gotoOpen, setGotoOpen] = useState(false);
-  const [infoBadge, setInfoBadge] = useState<BadgeId | null>(null);
 
   if (!started || classicOpen) return null;
 
@@ -59,7 +61,7 @@ export default function HUD() {
               key={id}
               type="button"
               className={isBadgeEarned(id, discovered) ? "hud__badge hud__badge--on" : "hud__badge"}
-              onClick={() => setInfoBadge(id)}
+              onClick={() => openBadgeInfo(id)}
               aria-label={`${ui(BADGE_LABEL_KEY[id], locale)} — ${ui(BADGE_DESC_KEY[id], locale)}`}
             >
               {BADGE_ICON[id]}
@@ -129,11 +131,11 @@ export default function HUD() {
       <Minimap />
 
       {infoBadge && (
-        <div className="dialog badge-modal" role="dialog" aria-modal="true" onClick={() => setInfoBadge(null)}>
+        <div className="dialog badge-modal" role="dialog" aria-modal="true" onClick={closeBadgeInfo}>
           <div className="dialog__card" onClick={(e) => e.stopPropagation()}>
             <button
               className="dialog__close"
-              onClick={() => setInfoBadge(null)}
+              onClick={closeBadgeInfo}
               aria-label={ui("close", locale)}
             >
               ✕

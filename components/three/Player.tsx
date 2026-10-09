@@ -30,8 +30,13 @@ export default function Player() {
       state.clearTeleport();
     }
 
-    // Entrada (bloqueada con diálogo, CV clásico o pantalla de inicio)
-    const canMove = state.started && !state.dialogId && !state.classicOpen;
+    // Entrada (bloqueada con diálogo, CV clásico, pantalla de inicio, o un modal de medalla)
+    const canMove =
+      state.started &&
+      !state.dialogId &&
+      !state.classicOpen &&
+      state.badgeQueue.length === 0 &&
+      !state.infoBadge;
     const { x: ix, y: iy } = canMove ? readAxes() : { x: 0, y: 0 };
     const magnitude = Math.hypot(ix, iy);
 

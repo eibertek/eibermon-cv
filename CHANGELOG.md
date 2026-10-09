@@ -2,6 +2,10 @@
 
 Novedades del juego, de más nueva a más vieja. Formato libre: una línea por feature o fix relevante para quien juega (no un log técnico commit-por-commit).
 
+## 2026-10-09 (7)
+
+- **Imagen al compartir el link**: compartir la URL en LinkedIn, Twitter, Slack, WhatsApp, etc. ahora muestra una card generada con la paleta del juego (nombre, puesto, y una bajada), en vez de un link pelado.
+
 ## 2026-10-09 (6)
 
 - La pantalla de batalla (Empezar → Rayo → Eiberball) ahora también responde a E, Espacio o Enter, no solo al click — antes solo funcionaba con el mouse.

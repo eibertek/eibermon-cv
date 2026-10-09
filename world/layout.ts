@@ -53,6 +53,8 @@ export type World = {
   jobs: JobSpot[];
   contact: { pos: Vec2; interactId: string };
   archive: { pos: Vec2; interactId: string };
+  /** Donde arranca el jugador: al lado del buzón, para que vea los links de contacto primero. */
+  startSpawn: Vec2;
   paths: PathRect[];
   decor: Decor[];
   interactables: Interactable[];
@@ -317,6 +319,7 @@ function buildWorld(): World {
     jobs: jobSpots,
     contact: { pos: [contactX, 0], interactId: "contact" },
     archive: { pos: [archiveX, archiveZ], interactId: "archive" },
+    startSpawn: contactDistrict.spawn,
     paths,
     decor,
     interactables,

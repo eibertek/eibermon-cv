@@ -88,8 +88,8 @@ export const cv: CV = {
       { label: { en: "Email", es: "Email" }, url: "mailto:mariano.eiberman@gmail.com" },
     ],
     contactMessage: {
-      en: "You made it to the end of the tour! If anything you saw caught your eye, write to me.",
-      es: "¡Llegaste al final del recorrido! Si algo de lo que viste te interesa, escribime.",
+      en: "Welcome! You can reach me anytime with the links below. Now walk through the city: catch the Eibermon wandering around to reveal my skills, and step into the buildings along the avenue to see my experience.",
+      es: "¡Bienvenido! Podés escribirme cuando quieras con estos links. Ahora recorré la ciudad: atrapá los Eibermon que andan sueltos para descubrir mis habilidades, y entrá a los edificios de la avenida para conocer mi experiencia.",
     },
   },
 

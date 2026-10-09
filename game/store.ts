@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { Locale } from "../data/i18n";
-import { interactableById } from "../world/layout";
+import { interactableById, world } from "../world/layout";
 
 type Teleport = { x: number; z: number };
 
@@ -95,7 +95,13 @@ export const useGame = create<GameState>()(
       rotateCam: (dir) => set((s) => ({ camRot: s.camRot + dir })),
       requestTeleport: (x, z) => set({ teleport: { x, z } }),
       clearTeleport: () => set({ teleport: null }),
-      resetProgress: () => set({ discovered: [], score: 0, runStartedAt: null }),
+      resetProgress: () =>
+        set({
+          discovered: [],
+          score: 0,
+          runStartedAt: null,
+          teleport: { x: world.startSpawn[0], z: world.startSpawn[1] },
+        }),
       setCharacter: (character) => set({ character }),
       catchSkill: (id) =>
         set((s) => {

@@ -2,6 +2,10 @@
 
 Novedades del juego, de más nueva a más vieja. Formato libre: una línea por feature o fix relevante para quien juega (no un log técnico commit-por-commit).
 
+## 2026-10-09 (5)
+
+- **Mantené Shift para correr** (por ahora, solo en teclado): la velocidad sube 1.7x mientras lo tenés apretado.
+
 ## 2026-10-09 (4)
 
 - Corregido: el botón ✕ del modal de "qué es esta medalla" no cerraba nada (el modal vivía dentro de un contenedor que bloqueaba los clics). Ahora también se puede cerrar con Escape o Enter, igual que los demás modales del juego.
